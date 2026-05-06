@@ -74,20 +74,32 @@
                             <p>Streamlined scheduling for ID pickups and student services.</p>
                         </div>
                     </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" aria-hidden="true"><i class="fas fa-pencil-alt"></i></div>
+                        <div class="feature-info">
+                            <h4>School Supplies</h4>
+                            <p>Quality stationary and essential tools for your academic success.</p>
+                        </div>
+                    </div>
                 </div>
                 <a href="#categories" class="btn-primary">Explore Shop</a>
             </div>
             <div class="about-images">
                 <div class="image-grid">
                     <div class="img-large">
-                        <img src="{{ asset('assets/images/about/campus.png') }}" alt="UB Campus Life">
+                        <img src="{{ asset('about-banner.jpg') }}" alt="UB Students" class="fade-img active">
+                        <img src="{{ asset('assets/images/about/about-banner-4.jpg') }}" alt="UB Excellence" class="fade-img">
+                        <div class="img-caption">University Excellence</div>
                     </div>
                     <div class="img-small">
-                        <img src="{{ asset('assets/images/about/uniform.png') }}" alt="Official Uniform">
+                        <img src="{{ asset('assets/images/about/about-banner.png') }}" alt="Official Uniforms">
                     </div>
                     <div class="img-floating">
-                        <img src="{{ asset('assets/images/about/id_card.png') }}" alt="Student ID Mockup">
+                        <img src="{{ asset('assets/images/about/about-banner-2.png') }}" alt="ID Services">
                     </div>
+                    <!-- Decorative Elements -->
+                    <div class="shape-blob"></div>
+                    <div class="shape-dots"></div>
                 </div>
             </div>
         </div>
@@ -146,7 +158,7 @@
 
     <!-- CTA Banner -->
     <div class="cta-banner">
-        <img src="{{ asset('CTA.jpeg') }}" alt="Call to Action">
+        <img src="{{ asset('assets/images/cta/CTA.png') }}" alt="Call to Action">
         <div class="cta-overlay">
             <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Ready to gear up?</h2>
             <p style="margin-bottom: 2rem; opacity: 0.9;">Join thousands of students who trust Brahmmart for their
@@ -231,6 +243,17 @@
                 nav.style.boxShadow = 'none';
             }
         });
+
+        // About Image Slider
+        const fadeImgs = document.querySelectorAll('.img-large .fade-img');
+        let currentImgIndex = 0;
+        if (fadeImgs.length > 1) {
+            setInterval(() => {
+                fadeImgs[currentImgIndex].classList.remove('active');
+                currentImgIndex = (currentImgIndex + 1) % fadeImgs.length;
+                fadeImgs[currentImgIndex].classList.add('active');
+            }, 3000);
+        }
     </script>
 </body>
 
