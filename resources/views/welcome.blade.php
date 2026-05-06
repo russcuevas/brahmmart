@@ -88,7 +88,8 @@
                 <div class="image-grid">
                     <div class="img-large">
                         <img src="{{ asset('about-banner.jpg') }}" alt="UB Students" class="fade-img active">
-                        <img src="{{ asset('assets/images/about/about-banner-4.jpg') }}" alt="UB Excellence" class="fade-img">
+                        <img src="{{ asset('assets/images/about/about-banner-4.jpg') }}" alt="UB Excellence"
+                            class="fade-img">
                         <div class="img-caption">University Excellence</div>
                     </div>
                     <div class="img-small">
@@ -147,11 +148,31 @@
                     Skip the long queues! You can now check if your school ID is ready for pickup and schedule a
                     convenient time to collect it.
                 </p>
-                <a href="#" class="btn-primary">Schedule Pickup</a>
+                <a href="javascript:void(0)" class="btn-primary" id="how-it-works-btn">How it works</a>
             </div>
             <div class="id-image">
-                <img src="https://images.unsplash.com/photo-1611095773767-116b3408c5c5?q=80&w=2070&auto=format&fit=crop"
-                    alt="ID Card Concept">
+                <div class="id-card-wrapper">
+                    <div class="id-card-img">
+                        <img src="{{ asset('assets/images/id/ub-batangas-id.png') }}" alt="UB Batangas ID">
+                    </div>
+                    <div class="id-card-info">
+                        <span>Batangas Campus</span>
+                        <h4>Official Student ID</h4>
+                    </div>
+                </div>
+                <div class="id-card-wrapper">
+                    <div class="id-card-img">
+                        <img src="{{ asset('assets/images/id/ub-lipa-id.png') }}" alt="UB Lipa ID">
+                    </div>
+                    <div class="id-card-info">
+                        <span>Lipa Campus</span>
+                        <h4>Official Student ID</h4>
+                    </div>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="id-shape-blob"></div>
+                <div class="id-shape-dots"></div>
+                <div class="id-shape-ring"></div>
             </div>
         </div>
     </section>
@@ -206,6 +227,66 @@
             &copy; 2026 Brahmmart. All rights reserved. Designed for Excellence.
         </div>
     </footer>
+    <!-- How It Works Modal -->
+    <div class="modal-overlay" id="how-it-works-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>How ID Scheduling Works</h3>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="steps-timeline">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-text">
+                            <h4>Step 1: Picture Yourself</h4>
+                            <p>Capture a high-quality photo of yourself wearing formal attire. Ensure good lighting and
+                                a plain background for the best ID quality.</p>
+                        </div>
+                        <div class="step-img">
+                            <img src="https://i.pinimg.com/474x/3a/74/85/3a74857ee413c986606ff6a7fa83329c.jpg"
+                                alt="Step 1">
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-text">
+                            <h4>Step 2: Provide Your Signature</h4>
+                            <p>Sign on a clean piece of white paper, take a clear photo of it, and crop it to focus on
+                                the signature itself.</p>
+                        </div>
+                        <div class="step-img">
+                            <img src="https://content-management-files.canva.com/4f4223e6-64c3-4006-8670-7cfc9697dcd9/product_electronic-signature_how-to2x.png"
+                                alt="Step 2">
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-text">
+                            <h4>Step 3: Upload at BRAHMMART ID PORTAL</h4>
+                            <p>Upload your photo and signature to the BRAHMMART ID PORTAL</p>
+                        </div>
+                        <div class="step-img">
+                            <img src="{{ asset('assets/images/id/id-portal.png') }}" alt="Step 3">
+                        </div>
+                    </div>
+
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <div class="step-text">
+                            <h4>Step 4: Wait for the admin approval and setting possible pickup date and time</h4>
+                            <p>Your ID will be ready in 2-3 working days.</p>
+                        </div>
+                        <div class="step-img">
+                            <img src="https://img.favpng.com/1/3/24/check-mark-scalable-vector-graphics-transparency-computer-icons-png-favpng-hKbZKgtYkdWPCDpBECiYzLfzd.jpg"
+                                alt="Step 4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Mobile Menu Toggle
@@ -254,6 +335,27 @@
                 fadeImgs[currentImgIndex].classList.add('active');
             }, 3000);
         }
+        // Modal Logic
+        const modal = document.getElementById('how-it-works-modal');
+        const openBtn = document.getElementById('how-it-works-btn');
+        const closeBtn = document.getElementById('close-modal');
+
+        openBtn.addEventListener('click', () => {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
     </script>
 </body>
 
