@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
+    <title>Brahmmart</title>
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/customers/welcome.css') }}">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-container">
+            <img src="{{ asset('logo.jpeg') }}" alt="Brahmmart Logo">
+            <span class="logo-text">BRAHMMART</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#categories">Shop</a></li>
+            <li><a href="#id-status">ID Scheduling</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="mobile-only"><a href="#" class="btn-primary">Sign In</a></li>
+        </ul>
+        <div class="nav-actions">
+            <a href="#" class="btn-primary desktop-only" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Sign
+                In</a>
+            <div class="mobile-toggle" id="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+        <div class="mobile-overlay" id="menu-overlay"></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="{{ asset('banner-vid.mp4') }}" type="video/mp4">
+        </video>
+        <div class="hero-overlay"></div>
+
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories">
+        <div class="section-header">
+            <h2>Shop by Category</h2>
+            <p>Explore our wide range of high-quality school essentials tailored for your academic success.</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+                <h3>Official Uniforms</h3>
+                <p>Perfectly tailored uniforms designed for comfort and durability throughout the school year.</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>Textbooks</h3>
+                <p>Complete set of curriculum books and reference materials for all grade levels.</p>
+            </div>
+            <div class="category-card">
+                <div class="category-icon">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+                <h3>School Supplies</h3>
+                <p>Everything from stationary to backpacks, curated for the modern student.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ID Scheduling Section -->
+    <section id="id-status">
+        <div class="id-section">
+            <div class="id-content">
+                <span class="id-status-badge">New Service</span>
+                <h2 style="font-size: 3rem; margin-bottom: 1.5rem;">ID Pickup <span
+                        class="text-gradient">Scheduling</span></h2>
+                <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">
+                    Skip the long queues! You can now check if your school ID is ready for pickup and schedule a
+                    convenient time to collect it.
+                </p>
+                <a href="#" class="btn-primary">Schedule Pickup</a>
+            </div>
+            <div class="id-image">
+                <img src="https://images.unsplash.com/photo-1611095773767-116b3408c5c5?q=80&w=2070&auto=format&fit=crop"
+                    alt="ID Card Concept">
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <div class="cta-banner">
+        <img src="{{ asset('CTA.jpeg') }}" alt="Call to Action">
+        <div class="cta-overlay">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Ready to gear up?</h2>
+            <p style="margin-bottom: 2rem; opacity: 0.9;">Join thousands of students who trust Brahmmart for their
+                academic needs.</p>
+            <div>
+                <a href="#" class="btn-primary">Get Started Now</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h2>BRAHMMART</h2>
+                <p style="color: var(--text-muted);">The leading provider of quality school essentials and student
+                    services.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#categories">Shop</a></li>
+                    <li><a href="#id-status">ID Status</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Connect</h4>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" style="font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                    <a href="#" style="font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Brahmmart. All rights reserved. Designed for Excellence.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        const menuOverlay = document.getElementById('menu-overlay');
+
+        function toggleMenu() {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            menuOverlay.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        menuToggle.addEventListener('click', toggleMenu);
+        menuOverlay.addEventListener('click', toggleMenu);
+
+        // Close menu when a link is clicked
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navLinks.classList.contains('active')) toggleMenu();
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.padding = '0.8rem 5%';
+                nav.style.background = '#752738';
+                nav.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                nav.style.padding = '1.2rem 5%';
+                nav.style.background = 'transparent';
+                nav.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
