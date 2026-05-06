@@ -17,11 +17,12 @@
     <!-- Navigation -->
     <nav>
         <div class="logo-container">
-            <img src="{{ asset('logo.jpeg') }}" alt="Brahmmart Logo">
+            <img src="{{ asset('logo-plain.png') }}" alt="Brahmmart Logo">
             <span class="logo-text">BRAHMMART</span>
         </div>
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
             <li><a href="#categories">Shop</a></li>
             <li><a href="#id-status">ID Scheduling</a></li>
             <li><a href="#contact">Contact</a></li>
@@ -44,6 +45,52 @@
         </video>
         <div class="hero-overlay"></div>
 
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about" aria-labelledby="about-heading">
+        <div class="about-container">
+            <div class="about-content">
+                <span class="about-badge">About Brahmmart</span>
+                <h2 id="about-heading" class="about-title">Empowering <span class="text-gradient">Brahman
+                        Excellence</span> Through Quality & Service</h2>
+                <p class="about-text">
+                    Brahmmart is the premier student-centric platform dedicated to the University of Batangas community.
+                    We provide high-quality, official school uniforms and essential academic supplies that uphold the
+                    tradition of excellence.
+                </p>
+                <div class="about-features">
+                    <div class="feature-item">
+                        <div class="feature-icon" aria-hidden="true"><i class="fas fa-check-circle"></i></div>
+                        <div class="feature-info">
+                            <h4>Official UB Uniforms</h4>
+                            <p>Authentic, durable, and perfectly tailored for every student.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon" aria-hidden="true"><i class="fas fa-id-card"></i></div>
+                        <div class="feature-info">
+                            <h4>ID & Document Services</h4>
+                            <p>Streamlined scheduling for ID pickups and student services.</p>
+                        </div>
+                    </div>
+                </div>
+                <a href="#categories" class="btn-primary">Explore Shop</a>
+            </div>
+            <div class="about-images">
+                <div class="image-grid">
+                    <div class="img-large">
+                        <img src="{{ asset('assets/images/about/campus.png') }}" alt="UB Campus Life">
+                    </div>
+                    <div class="img-small">
+                        <img src="{{ asset('assets/images/about/uniform.png') }}" alt="Official Uniform">
+                    </div>
+                    <div class="img-floating">
+                        <img src="{{ asset('assets/images/about/id_card.png') }}" alt="Student ID Mockup">
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- Categories Section -->
