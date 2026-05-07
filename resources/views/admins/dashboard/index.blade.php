@@ -384,7 +384,6 @@
         </main>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // ===== SIDEBAR TOGGLE (Mobile) =====
         const sidebar = document.getElementById('sidebar');
@@ -421,26 +420,6 @@
         if (hour < 12) greeting = 'Good morning';
         else if (hour < 18) greeting = 'Good afternoon';
         greetingEl.textContent = `${greeting}, Admin`;
-
-        // ===== TOAST GREETING =====
-        const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-
-        @if (session('success'))
-            Toast.fire({
-                icon: 'success',
-                title: greeting + '!'
-            });
-        @endif
 
         // ===== CHART BARS ANIMATION =====
         const chartData = {

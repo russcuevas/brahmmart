@@ -32,7 +32,9 @@ Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->nam
 
 
 // ADMIN ROUTES
-Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard.page');
+Route::middleware(['admin'])->group(function () {
+    Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard.page');
+});
 
 
 // CUSTOMER ROUTES

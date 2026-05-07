@@ -16,12 +16,12 @@ program -> (shs) (college)
 categories
 category_name -> uniforms, school supplies, books
 
-courses
-course_name
+uniforms_category
+uniform_name
 
 products
 category_id -> foreign to categories table
-course_id -> foreign to courses table
+uniform_category_id -> foreign to uniforms_category table
 product_name
 product_description
 product_price
