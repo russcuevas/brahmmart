@@ -70,19 +70,33 @@
                     <input type="password" name="password" placeholder="Password" required>
                 </div>
 
+
+                <!-- Department Section -->
+                <div class="section">
+                    <h2 class="section-title">Department </h2>
+                    <select name="department" required>
+                        <option value="" disabled selected>Select your department</option>
+                        <option value="junior high school"
+                            {{ old('department') == 'junior high school' ? 'selected' : '' }}>Junior High School
+                        </option>
+                        <option value="shs" {{ old('department') == 'shs' ? 'selected' : '' }}>SHS</option>
+                        <option value="college" {{ old('department') == 'college' ? 'selected' : '' }}>College</option>
+                    </select>
+                </div>
+
                 <!-- Education Section (Custom for User) -->
                 <div class="section">
                     <h2 class="section-title">Education</h2>
                     <div class="input-row">
-                        <select name="year" required>
-                            <option value="" disabled selected>Year</option>
+                        <select name="grade_level" required>
+                            <option value="" disabled selected>Grade/Level</option>
                             <option value="1">1st Year</option>
                             <option value="2">2nd Year</option>
                             <option value="3">3rd Year</option>
                             <option value="4">4th Year</option>
                         </select>
-                        <select name="course" required>
-                            <option value="" disabled selected>Course</option>
+                        <select name="Program" required>
+                            <option value="" disabled selected>Program</option>
                             <option value="BSIT">BSIT</option>
                             <option value="BSCS">BSCS</option>
                             <option value="BSA">BSA</option>

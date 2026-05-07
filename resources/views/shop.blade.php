@@ -16,285 +16,360 @@
     <nav class="shop-nav">
         <a href="/" class="shop-nav-brand">
             <img src="{{ asset('favicon.png') }}" alt="BRAHMMART">
-            <h2>BRAHMMART</h2>
+            <span class="shop-logo-text">BRAHMMART</span>
         </a>
-        <ul class="shop-nav-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="{{ route('shop.page') }}" class="active">Shop</a></li>
-            <li><a href="/#id-status">ID Scheduling</a></li>
-            <li><a href="/#contact">Contact</a></li>
-        </ul>
+
         <div class="shop-nav-actions">
-            <button class="shop-nav-icon" aria-label="Search">
-                <i class="fas fa-magnifying-glass"></i>
+            <button class="shop-filter-toggle" id="shopFilterToggle" title="Filter Settings">
+                <i class="fas fa-cog"></i>
             </button>
-            <button class="shop-nav-icon" aria-label="Cart">
+            <button class="shop-nav-icon" id="cartToggleBtn" aria-label="Cart">
                 <i class="fas fa-bag-shopping"></i>
                 <span class="cart-count">2</span>
             </button>
             <a href="/login" class="shop-nav-icon" aria-label="Account">
                 <i class="fas fa-user"></i>
             </a>
-            <button class="shop-mobile-toggle" id="shopMobileToggle" aria-label="Menu">
-                <i class="fas fa-bars"></i>
-            </button>
+
         </div>
     </nav>
 
-    {{-- ===== BREADCRUMB ===== --}}
-    <div class="breadcrumb">
-        <a href="/">Home</a>
-        <i class="fas fa-chevron-right"></i>
-        <a href="{{ route('shop.page') }}">Shop</a>
-        <i class="fas fa-chevron-right"></i>
-        <a href="#">Uniforms</a>
-        <i class="fas fa-chevron-right"></i>
-        <span class="current">UB Official School Polo</span>
+    <div class="shop-container">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        {{-- ===== SIDEBAR ===== --}}
+        <aside class="shop-sidebar" id="shopSidebar">
+            <div class="sidebar-header">
+                <h3>Filters</h3>
+                <button class="sidebar-close" id="sidebarClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Product Categories</h3>
+                <ul class="category-list">
+                    <li><a href="#" class="active">All Products</a></li>
+                    <li><a href="#">Uniforms</a></li>
+                    <li><a href="#">School Supplies</a></li>
+                    <li><a href="#">Books</a></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Filter by Price</h3>
+                <div class="price-range">
+                    <input type="range" min="0" max="5000" value="2500" class="slider">
+                    <div class="price-labels">
+                        <span>₱0</span>
+                        <span>₱5,000+</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3 class="sidebar-title">Department</h3>
+                <div class="filter-options">
+                    <label class="filter-item">
+                        <input type="checkbox"> <span>College</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox"> <span>Senior High School</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox"> <span>Junior High School</span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        {{-- ===== MAIN CONTENT ===== --}}
+        <main class="shop-main">
+            <div class="shop-header">
+                <div class="breadcrumb">
+                    <a href="/">Home</a>
+                    <i class="fas fa-chevron-right"></i>
+                    <span>Shop</span>
+                </div>
+                <div class="shop-utils">
+                    <select class="sort-select">
+                        <option>Default Sorting</option>
+                        <option>Price: Low to High</option>
+                        <option>Price: High to Low</option>
+                        <option>Newest Arrivals</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-grid">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Polo">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Uniforms</span>
+                        <h4 class="product-name">UB Type A Female College Blouse</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(186)</span>
+                        </div>
+                        <div class="product-price">₱620.00</div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="{{ asset('assets/images/vest-girl/piece.jpeg') }}" alt="Vest">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Uniforms</span>
+                        <h4 class="product-name">UB Official School Vest</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(42)</span>
+                        </div>
+                        <div class="product-price">₱520.00</div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Skirt">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Uniforms</span>
+                        <h4 class="product-name">UB Official School Skirt</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>(128)</span>
+                        </div>
+                        <div class="product-price">₱380.00</div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=2048&auto=format&fit=crop"
+                            alt="Notebook">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">School Supplies</span>
+                        <h4 class="product-name">UB Premium Hardbound Notebook</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(512)</span>
+                        </div>
+                        <div class="product-price">₱185.00</div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1512418490979-92798ccc1380?q=80&w=2040&auto=format&fit=crop"
+                            alt="Bag">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">School Supplies</span>
+                        <h4 class="product-name">Brahmmart Official Backpack</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>(2.4k)</span>
+                        </div>
+                        <div class="product-price">₱1,250.00</div>
+                    </div>
+                </div>
+
+                <!-- Product 6 -->
+                <div class="product-card">
+                    <div class="product-img">
+                        <img src="https://images.unsplash.com/photo-1544640808-32ca72ac7f37?q=80&w=2070&auto=format&fit=crop"
+                            alt="Book">
+                        <div class="product-actions">
+                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-cat">Books</span>
+                        <h4 class="product-name">Intro to Computer Science — Textbook</h4>
+                        <div class="product-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>(15)</span>
+                        </div>
+                        <div class="product-price">₱850.00</div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    {{-- ===== PRODUCT PAGE ===== --}}
-    <div class="product-page">
-
-        {{-- === LEFT: Product Images === --}}
-        <div class="product-images">
-            <div class="product-main-img" id="mainImgWrap">
-                <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="UB Official School Polo"
-                    id="mainProductImg">
+    {{-- ===== CART DRAWER ===== --}}
+    <div class="cart-drawer-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+            <div class="cart-header-left">
+                <h3>Shopping Bag</h3>
+                <span class="cart-badge-count">2 Items</span>
             </div>
-            <div class="product-thumbs">
-                <div class="product-thumb active"
-                    onclick="changeImage('{{ asset('assets/images/polo-girl/1.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Polo Front">
-                </div>
-                <div class="product-thumb" onclick="changeImage('{{ asset('assets/images/polo-girl/2.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/2.jpeg') }}" alt="Polo Side">
-                </div>
-                <div class="product-thumb"
-                    onclick="changeImage('{{ asset('assets/images/polo-girl/3.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/3.jpeg') }}" alt="Polo Back">
-                </div>
-                <div class="product-thumb"
-                    onclick="changeImage('{{ asset('assets/images/polo-girl/4.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/4.jpeg') }}" alt="Polo Back">
-                </div>
-            </div>
+            <button class="cart-drawer-close" id="cartClose">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
-        {{-- === CENTER: Product Details === --}}
-        <div class="product-details">
-            <a href="#" class="product-store">
-                <i class="fas fa-store"></i> Visit BRAHMMART Store
-            </a>
-
-            <h1 class="product-title">UB Type A Female College Blouse</h1>
-
-            <p class="product-description">
-                The official University of Batangas school polo is crafted from premium cotton-polyester blend for
-                lasting comfort. Features an embroidered UB logo, reinforced stitching, and a classic fit that meets
-                school dress code standards. Designed for everyday wear throughout the academic year.
-            </p>
-
-            {{-- Ratings --}}
-            <div class="product-ratings">
-                <div class="rating-stars">
-                    <span>4.8</span>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-stroke"></i>
+        <div class="cart-drawer-items">
+            <!-- Item 1 -->
+            <div class="cart-item">
+                <div class="cart-item-img">
+                    <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Product">
                 </div>
-                <span class="rating-stat"><strong>186</strong> Ratings</span>
-                <span class="rating-stat"><strong>2.1k+</strong> Sold</span>
-            </div>
-
-            {{-- Size Selector --}}
-            <label class="product-option-label">Size:</label>
-            <div class="size-selector" id="sizeSelector">
-                <button class="size-btn" data-size="S" onclick="selectSize(this)">S</button>
-                <button class="size-btn active" data-size="M" onclick="selectSize(this)">M</button>
-                <button class="size-btn" data-size="L" onclick="selectSize(this)">L</button>
-                <button class="size-btn" data-size="XL" onclick="selectSize(this)">XL</button>
-                <button class="size-btn" data-size="2XL" onclick="selectSize(this)">2XL</button>
-                <button class="size-btn" data-size="3XL" onclick="selectSize(this)">3XL</button>
-                <button class="size-btn" data-size="4XL" onclick="selectSize(this)">4XL</button>
-                <button class="size-btn" data-size="5XL" onclick="selectSize(this)">5XL</button>
-                <button class="size-btn" data-size="6XL" onclick="selectSize(this)">6XL</button>
-            </div>
-
-            {{-- Stock Warning --}}
-            <div class="stock-warning">
-                <i class="fas fa-fire"></i>
-                <div>
-                    <p>There are just <strong>5</strong> left in stock, so please act immediately.</p>
-                    <div class="stock-bar">
-                        <div class="stock-bar-fill" style="width: 15%;"></div>
+                <div class="cart-item-info">
+                    <div class="cart-item-top">
+                        <h4>UB Type A Female Blouse</h4>
+                        <button class="cart-item-remove"><i class="fas fa-trash-can"></i></button>
+                    </div>
+                    <span class="cart-item-variant">Size: M</span>
+                    <div class="cart-item-bottom">
+                        <div class="cart-item-qty">
+                            <button class="qty-btn-cart"><i class="fas fa-minus"></i></button>
+                            <span>1</span>
+                            <button class="qty-btn-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="cart-item-price">₱620.00</div>
                     </div>
                 </div>
             </div>
 
-            {{-- Action Links --}}
-            <div class="product-action-links">
-                <a href="#" class="product-action-link">
-                    <i class="fas fa-ruler"></i> Size Chart
-                </a>
-            </div>
-
-            {{-- About Item --}}
-            <div class="about-item">
-                <h4>About Item</h4>
-                <div class="about-table">
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">Material</div>
-                        <div class="about-table-cell value">Cotton-Poly Blend</div>
+            <!-- Item 2 -->
+            <div class="cart-item">
+                <div class="cart-item-img">
+                    <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Product">
+                </div>
+                <div class="cart-item-info">
+                    <div class="cart-item-top">
+                        <h4>UB Official School Skirt</h4>
+                        <button class="cart-item-remove"><i class="fas fa-trash-can"></i></button>
                     </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">Type</div>
-                        <div class="about-table-cell value">School Polo</div>
-                    </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">For</div>
-                        <div class="about-table-cell value">All Departments</div>
-                    </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">Category</div>
-                        <div class="about-table-cell value">Official Uniform</div>
-                    </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">Care</div>
-                        <div class="about-table-cell value">Machine Washable</div>
+                    <span class="cart-item-variant">Size: M</span>
+                    <div class="cart-item-bottom">
+                        <div class="cart-item-qty">
+                            <button class="qty-btn-cart"><i class="fas fa-minus"></i></button>
+                            <span>1</span>
+                            <button class="qty-btn-cart"><i class="fas fa-plus"></i></button>
+                        </div>
+                        <div class="cart-item-price">₱380.00</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- === RIGHT: Purchase Sidebar === --}}
-        <div class="purchase-sidebar">
-            <div class="purchase-card">
-
-                {{-- Selected Variant --}}
-                <div class="selected-variant">
-                    <div class="variant-thumb">
-                        <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Selected">
-                    </div>
-                    <div class="variant-info">
-                        <span>Selected Variant</span>
-                        <strong id="selectedVariantText">Size M — UB Type A Female College Blouse</strong>
-                    </div>
+        <div class="cart-drawer-footer">
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₱1,000.00</span>
                 </div>
-
-                {{-- Quantity --}}
-                <div class="purchase-qty">
-                    <div class="qty-control">
-                        <button class="qty-btn" id="qtyMinus" onclick="updateQty(-1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <div class="qty-value" id="qtyValue">1</div>
-                        <button class="qty-btn" id="qtyPlus" onclick="updateQty(1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <span class="stock-info">Stock: <strong>856</strong></span>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span class="free-shipping">FREE</span>
                 </div>
-
-                {{-- Price --}}
-                <div class="purchase-price">
-                    <span class="price-label">Total Price:</span>
-                    <span class="price-value" id="totalPrice">₱620.00</span>
-                </div>
-
-                {{-- Buttons --}}
-                <div class="purchase-actions">
-                    <button class="btn-buy primary" id="buyNowBtn">
-                        Buy Now
-                    </button>
-                    <button class="btn-buy secondary" id="addToBagBtn">
-                        <i class="fas fa-lock"></i> Add To Bag
-                    </button>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>₱1,000.00</span>
                 </div>
             </div>
-
-            {{-- Other Products --}}
-            <div class="new-products-card">
-                <h4>Other Products</h4>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/vest-girl/piece.jpeg') }}" alt="Vest">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>UB Official School Vest</h5>
-                        <span class="new-price">₱520.00 <span class="old-price">₱650.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/criminology-uniform/set.jpeg') }}" alt="Crim Set">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>Criminology Uniform Set</h5>
-                        <span class="new-price">₱1,850.00 <span class="old-price">₱2,200.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Skirt">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>UB Official School Skirt</h5>
-                        <span class="new-price">₱380.00 <span class="old-price">₱450.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/essentials-girl/necktie.jpeg') }}" alt="Necktie">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>UB Necktie — Official</h5>
-                        <span class="new-price">₱150.00 <span class="old-price">₱180.00</span></span>
-                    </div>
-                </div>
+            <div class="cart-actions">
+                <button class="btn-checkout-cart">Checkout Now</button>
+                <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
             </div>
         </div>
     </div>
 
     <script>
-        // ===== IMAGE SWITCHER =====
-        function changeImage(src, thumbEl) {
-            document.getElementById('mainProductImg').src = src;
-            document.querySelectorAll('.product-thumb').forEach(t => t.classList.remove('active'));
-            thumbEl.classList.add('active');
+        // ===== SIDEBAR TOGGLE =====
+        const filterToggle = document.getElementById('shopFilterToggle');
+        const sidebar = document.getElementById('shopSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+        const closeSidebar = document.getElementById('sidebarClose');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
         }
 
-        // ===== SIZE SELECTOR =====
-        const basePrice = 480;
+        if (filterToggle) filterToggle.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
+        if (closeSidebar) closeSidebar.addEventListener('click', toggleSidebar);
 
-        function selectSize(btn) {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const size = btn.dataset.size;
-            document.getElementById('selectedVariantText').textContent = `Size ${size} — School Polo`;
-            updatePrice();
-        }
-
-        // ===== QUANTITY =====
-        let qty = 1;
-
-        function updateQty(change) {
-            qty = Math.max(1, Math.min(qty + change, 856));
-            document.getElementById('qtyValue').textContent = qty;
-            updatePrice();
-        }
-
-        function updatePrice() {
-            const total = (basePrice * qty).toLocaleString('en-PH', {
-                minimumFractionDigits: 2
+        // Mobile Nav Toggle (assuming it exists in header)
+        const mobileToggle = document.getElementById('shopMobileToggle');
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                // Handle mobile menu toggle if needed
             });
-            document.getElementById('totalPrice').textContent = `₱${total}`;
         }
+
+        // ===== CART DRAWER =====
+        const cartToggleBtn = document.getElementById('cartToggleBtn');
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const cartClose = document.getElementById('cartClose');
+        const continueShopping = document.getElementById('continueShopping');
+
+        function toggleCart() {
+            cartDrawer.classList.toggle('active');
+            cartOverlay.classList.toggle('active');
+            document.body.style.overflow = cartDrawer.classList.contains('active') ? 'hidden' : '';
+        }
+
+        if (cartToggleBtn) cartToggleBtn.addEventListener('click', toggleCart);
+        if (cartClose) cartClose.addEventListener('click', toggleCart);
+        if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
+        if (continueShopping) continueShopping.addEventListener('click', toggleCart);
     </script>
 </body>
 

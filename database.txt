@@ -2,6 +2,7 @@ admins
 email
 password
 
+
 customers
 fullname
 gender
@@ -9,3 +10,29 @@ phone_number
 email
 password
 address
+department -> junior high school, shs, college
+grade/year -> (junior high school: 7-10), (shs: 11-12), (college: 1-4)
+program -> (shs) (college)
+
+categories
+category_name -> uniforms, school supplies, uniforms
+
+courses
+course_name
+
+products
+category_id -> foreign to categories table
+course_id -> foreign to courses table
+product_name
+product_description
+product_price
+product_image
+stocks
+has_variant -> boolean (if true, then it has variants, if false, then it has no variants)
+
+product_variant
+product_id -> foreign to products table
+size 
+price
+stock
+

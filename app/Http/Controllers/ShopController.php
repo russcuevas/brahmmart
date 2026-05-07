@@ -10,4 +10,8 @@ class ShopController extends Controller
     {
         return view('shop');
     }
+    public function SingleProductPage()
+    {
+        return view('single_product');
+    }
 }

@@ -23,7 +23,7 @@
         <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#categories">Shop</a></li>
+            <li><a href="/shop">Shop</a></li>
             <li><a href="#id-status">ID Scheduling</a></li>
             <li><a href="#contact">Contact</a></li>
             <li class="mobile-only"><a href="/login" class="btn-primary">Sign In</a></li>
@@ -82,21 +82,20 @@
                         </div>
                     </div>
                 </div>
-                <a href="#categories" class="btn-primary">Explore Shop</a>
+                <a href="/shop" class="btn-primary">Explore More at Our Shop</a>
             </div>
             <div class="about-images">
                 <div class="image-grid">
                     <div class="img-large">
                         <img src="{{ asset('about-banner.jpg') }}" alt="UB Students" class="fade-img active">
-                        <img src="{{ asset('assets/images/about/about-banner-4.jpg') }}" alt="UB Excellence"
-                            class="fade-img">
+                        <img src="{{ asset('about-banner-2.jpg') }}" alt="UB Excellence" class="fade-img">
                         <div class="img-caption">University Excellence</div>
                     </div>
                     <div class="img-small">
                         <img src="{{ asset('assets/images/about/about-banner.png') }}" alt="Official Uniforms">
                     </div>
                     <div class="img-floating">
-                        <img src="{{ asset('assets/images/about/about-banner-2.png') }}" alt="ID Services">
+                        <img src="{{ asset('assets/images/id/ub-lipa-id.png') }}" alt="ID Services">
                     </div>
                     <!-- Decorative Elements -->
                     <div class="shape-blob"></div>
@@ -142,32 +141,26 @@
         <div class="id-section">
             <div class="id-content">
                 <span class="id-status-badge">New Service</span>
-                <h2 style="font-size: 3rem; margin-bottom: 1.5rem;">ID Pickup <span
-                        class="text-gradient">Scheduling</span></h2>
+                <h2 style="font-size: 3rem; margin-bottom: 1.5rem;">Schedule & Submit <span class="text-gradient">ID
+                        Requirements</span></h2>
                 <p style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 2rem;">
-                    Skip the long queues! You can now check if your school ID is ready for pickup and schedule a
-                    convenient time to collect it.
+                    Upload your digital requirements and schedule your ID pickup in one seamless process.
+                    Skip the lines and get your official University ID faster.
                 </p>
                 <a href="javascript:void(0)" class="btn-primary" id="how-it-works-btn">How it works</a>
             </div>
             <div class="id-image">
                 <div class="id-card-wrapper">
-                    <div class="id-card-img">
-                        <img src="{{ asset('assets/images/id/ub-batangas-id.png') }}" alt="UB Batangas ID">
-                    </div>
-                    <div class="id-card-info">
-                        <span>Batangas Campus</span>
-                        <h4>Official Student ID</h4>
-                    </div>
-                </div>
-                <div class="id-card-wrapper">
+                    <div class="id-card-badge"><i class="fas fa-certificate"></i> Official</div>
                     <div class="id-card-img">
                         <img src="{{ asset('assets/images/id/ub-lipa-id.png') }}" alt="UB Lipa ID">
                     </div>
                     <div class="id-card-info">
                         <span>Lipa Campus</span>
                         <h4>Official Student ID</h4>
+                        <p class="id-subtext">Issued by the University of Batangas</p>
                     </div>
+                    <div class="id-card-shine"></div>
                 </div>
                 <!-- Decorative Elements -->
                 <div class="id-shape-blob"></div>
@@ -311,9 +304,13 @@
             });
         });
 
-        // Navbar scroll effect
+        // Navbar scroll effect & Active Link (Scroll Spy)
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            // Background change on scroll
             if (window.scrollY > 50) {
                 nav.style.padding = '0.8rem 5%';
                 nav.style.background = '#752738';
@@ -323,7 +320,27 @@
                 nav.style.background = 'transparent';
                 nav.style.boxShadow = 'none';
             }
+
+            // Scroll Spy logic
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
         });
+
+        // Set initial active link
+        window.dispatchEvent(new Event('scroll'));
 
         // About Image Slider
         const fadeImgs = document.querySelectorAll('.img-large .fade-img');

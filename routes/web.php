@@ -25,6 +25,7 @@ Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.reg
 Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.page');
 
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
+Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
 
 // ADMIN ROUTES
 Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard');
