@@ -22,7 +22,7 @@
             {{-- Brand --}}
             <div class="sidebar-brand">
                 <div class="sidebar-brand-icon">
-                    <img style="height: 50px; width: 50px;" src="{{ asset('favicon.png') }}" alt="BRAHMMART">
+                    <img style="height: 50px; width: 50px;" src="{{ asset('logo-plain.png') }}" alt="BRAHMMART">
                 </div>
                 <div class="sidebar-brand-text">
                     <h2>BRAHMMART</h2>
@@ -34,14 +34,21 @@
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-label">Main Menu</div>
 
-                <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item active" id="nav-dashboard">
+                <a href="{{ route('admin.dashboard.page') }}" class="sidebar-nav-item active" id="nav-dashboard">
                     <i class="fas fa-home"></i>
                     Dashboard
                 </a>
 
+
                 <a href="#" class="sidebar-nav-item" id="nav-accounts">
-                    <i class="fas fa-users"></i>
-                    Accounts
+                    <i class="fas fa-user-tie"></i>
+                    Admins
+                    <span class="nav-badge">24</span>
+                </a>
+
+                <a href="#" class="sidebar-nav-item" id="nav-students">
+                    <i class="fas fa-user-graduate"></i>
+                    Students
                     <span class="nav-badge">24</span>
                 </a>
 
@@ -65,7 +72,7 @@
                 </a>
 
                 <a href="#" class="sidebar-nav-item" id="nav-analytics">
-                    <i class="fas fa-chart-mixed"></i>
+                    <i class="fas fa-chart-simple"></i>
                     Analytics
                 </a>
 
@@ -73,13 +80,20 @@
 
             {{-- Sidebar Footer --}}
             <div class="sidebar-footer">
-                <div class="sidebar-user">
-                    <div class="sidebar-user-avatar">AD</div>
+                <div class="sidebar-user"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    style="cursor: pointer;">
+                    <div class="sidebar-user-avatar"><img style="height: 50px; width: 50px;"
+                            src="{{ asset('favicon.png') }}" alt="">
+                    </div>
                     <div class="sidebar-user-info">
-                        <h4>Admin User</h4>
-                        <span>Super Admin</span>
+                        <h4>{{ Auth::guard('admin')->user()->email }}</h4>
+                        <span>Logout</span>
                     </div>
                 </div>
+                <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </div>
         </aside>
 
@@ -370,6 +384,7 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // ===== SIDEBAR TOGGLE (Mobile) =====
         const sidebar = document.getElementById('sidebar');
@@ -406,6 +421,26 @@
         if (hour < 12) greeting = 'Good morning';
         else if (hour < 18) greeting = 'Good afternoon';
         greetingEl.textContent = `${greeting}, Admin`;
+
+        // ===== TOAST GREETING =====
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        @if (session('success'))
+            Toast.fire({
+                icon: 'success',
+                title: greeting + '!'
+            });
+        @endif
 
         // ===== CHART BARS ANIMATION =====
         const chartData = {

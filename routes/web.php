@@ -25,13 +25,15 @@ Route::get('/', function () {
 // GUEST ROUTES
 Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.register.page');
 Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.page');
+Route::post('/login', [AuthController::class, 'LoginRequest'])->name('auth.login.request');
+Route::post('/logout', [AuthController::class, 'Logout'])->name('auth.logout');
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
 Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
 
 
 // ADMIN ROUTES
-Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard.page');
 
 
 // CUSTOMER ROUTES
-Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard');
+Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard.page');

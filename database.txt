@@ -2,7 +2,6 @@ admins
 email
 password
 
-
 customers
 fullname
 gender
@@ -15,7 +14,7 @@ grade/year -> (junior high school: 7-10), (shs: 11-12), (college: 1-4)
 program -> (shs) (college)
 
 categories
-category_name -> uniforms, school supplies, uniforms
+category_name -> uniforms, school supplies, books
 
 courses
 course_name

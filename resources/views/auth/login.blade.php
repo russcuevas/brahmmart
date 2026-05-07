@@ -43,12 +43,11 @@
             <div class="login-card">
                 <h2>Log into BRAHMMART</h2>
 
-                <form action="" method="POST">
+                <form action="{{ route('auth.login.request') }}" method="POST">
                     @csrf
 
                     <div class="form-group">
-                        <input type="text" name="email" placeholder="Email or mobile number" required
-                            value="{{ old('email') }}">
+                        <input type="text" name="email" placeholder="Email" required value="{{ old('email') }}">
                     </div>
 
                     <div class="form-group">
@@ -68,6 +67,42 @@
 
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        @if (session('success'))
+            Toast.fire({
+                icon: 'success',
+                title: "{{ session('success') }}"
+            });
+        @endif
+
+        @if (session('error'))
+            Toast.fire({
+                icon: 'error',
+                title: "{{ session('error') }}"
+            });
+        @endif
+
+        @if ($errors->any())
+            Toast.fire({
+                icon: 'error',
+                title: "{{ $errors->first() }}"
+            });
+        @endif
+    </script>
 
 </body>
 

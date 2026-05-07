@@ -22,7 +22,7 @@
             {{-- Brand --}}
             <div class="sidebar-brand">
                 <div class="sidebar-brand-icon">
-                    <img style="height: 50px; width: 50px;" src="{{ asset('favicon.png') }}" alt="BRAHMMART">
+                    <img style="height: 50px; width: 50px;" src="{{ asset('logo-plain.png') }}" alt="BRAHMMART">
                 </div>
                 <div class="sidebar-brand-text">
                     <h2>BRAHMMART</h2>
@@ -67,10 +67,12 @@
             {{-- Sidebar Footer --}}
             <div class="sidebar-footer">
                 <div class="sidebar-user">
-                    <div class="sidebar-user-avatar">SC</div>
+                    <div class="sidebar-user-avatar"><img style="height: 50px; width: 50px;"
+                            src="{{ asset('favicon.png') }}" alt="">
+                    </div>
                     <div class="sidebar-user-info">
-                        <h4>Student Name</h4>
-                        <span>2420650</span>
+                        <h4>2420580@ub.edu.ph</h4>
+                        <span>Logout</span>
                     </div>
                 </div>
             </div>
