@@ -64,16 +64,6 @@
                     <input type="text" name="address" placeholder="Address" required value="{{ old('address') }}">
                 </div>
 
-                <!-- Campus Section -->
-                <div class="section">
-                    <h2 class="section-title">UB Campus</h2>
-                    <select name="campus" required>
-                        <option value="" disabled selected>Select Campus</option>
-                        <option value="MAIN" {{ old('campus') == 'MAIN' ? 'selected' : '' }}>MAIN</option>
-                        <option value="LIPA" {{ old('campus') == 'LIPA' ? 'selected' : '' }}>LIPA</option>
-                    </select>
-                </div>
-
                 <!-- Password Section -->
                 <div class="section">
                     <h2 class="section-title">Password</h2>

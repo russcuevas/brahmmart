@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +22,9 @@ Route::get('/', function () {
 
 
 Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.register.page');
-
 Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.page');
+
+Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
+
+// ADMIN ROUTES
+Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard');

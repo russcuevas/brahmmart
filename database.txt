@@ -1,0 +1,11 @@
+admins
+email
+password
+
+customers
+fullname
+gender
+phone_number
+email
+password
+address
