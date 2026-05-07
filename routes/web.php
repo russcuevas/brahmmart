@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\auth\AuthController;
+use App\Http\Controllers\customers\CustomersDashboardController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,11 +22,16 @@ Route::get('/', function () {
 });
 
 
+// GUEST ROUTES
 Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.register.page');
 Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.page');
-
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
 Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
 
+
 // ADMIN ROUTES
 Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard');
+
+
+// CUSTOMER ROUTES
+Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard');

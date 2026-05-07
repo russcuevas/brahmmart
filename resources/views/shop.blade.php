@@ -84,18 +84,29 @@
         {{-- ===== MAIN CONTENT ===== --}}
         <main class="shop-main">
             <div class="shop-header">
-                <div class="breadcrumb">
-                    <a href="/">Home</a>
-                    <i class="fas fa-chevron-right"></i>
-                    <span>Shop</span>
+                <div class="shop-header-top">
+                    <div class="breadcrumb">
+                        <a href="/">Home</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="current">Shop</span>
+                    </div>
                 </div>
-                <div class="shop-utils">
-                    <select class="sort-select">
-                        <option>Default Sorting</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Newest Arrivals</option>
-                    </select>
+
+                <div class="shop-action-bar">
+                    <div class="shop-search-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="shop-search-input" placeholder="Search for uniforms, books, supplies...">
+                        <button class="search-btn">Search</button>
+                    </div>
+                    <div class="shop-utils">
+                        <span class="results-count">Showing 6 products</span>
+                        <select class="sort-select">
+                            <option>Default Sorting</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Newest Arrivals</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
