@@ -1,0 +1,229 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+    --primary: #752738;
+    --fb-blue: #1877f2;
+    --text-black: #1c1e21;
+    --text-gray: #606770;
+    --input-bg: #f5f6f7;
+    --border-color: #dddfe2;
+    --btn-secondary: #42b72a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: var(--text-black);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+/* Left Side - Visual */
+.login-visual-panel {
+    flex: 1.2;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 120px 6% 60px;
+    position: relative;
+    min-height: 600px;
+}
+
+.fb-logo-placeholder {
+    position: absolute;
+    top: 40px;
+    left: 5%;
+}
+
+.fb-logo-placeholder img {
+    height: 50px;
+}
+
+.visual-content {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100%;
+    width: 100%;
+}
+
+.visual-content h1 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-top: 40px;
+    color: var(--text-black);
+    display: flex;
+    flex-direction: column;
+    letter-spacing: -1px;
+}
+
+.visual-content h1 .accent {
+    color: var(--primary);
+    font-size: 1.1em;
+}
+
+.floating-images {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.floating-images img {
+    width: 110%;
+    max-width: 600px;
+    max-height: 55vh;
+    object-fit: contain;
+    border-radius: 70px;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-left: 10%;
+}
+
+.floating-images img:hover {
+    transform: scale(1.02);
+}
+
+/* Right Side - Form */
+.login-form-panel {
+    flex: 0.8;
+    background-color: #ffffff;
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5%;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.login-card h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-black);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #ffffff;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(117, 39, 56, 0.1);
+}
+
+.btn-login {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 5px;
+    transition: filter 0.2s;
+}
+
+.btn-login:hover {
+    filter: brightness(0.9);
+}
+
+.forgot-password {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+.divider {
+    border-top: 1px solid var(--border-color);
+    margin: 30px 0;
+    position: relative;
+}
+
+.btn-create-account {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 12px 24px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background-color: transparent;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    transition: background-color 0.2s;
+}
+
+.btn-create-account:hover {
+    background-color: rgba(117, 39, 56, 0.05);
+}
+
+.meta-footer {
+    margin-top: 40px;
+    text-align: center;
+    color: var(--text-gray);
+    font-size: 0.8rem;
+}
+
+.meta-footer i {
+    font-size: 1rem;
+    color: var(--fb-blue);
+    vertical-align: middle;
+}
+
+@media (max-width: 992px) {
+    .login-container {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+
+    .login-visual-panel {
+        display: none;
+    }
+
+    .login-form-panel {
+        flex: 1;
+        padding: 40px 20px;
+        border-left: none;
+    }
+}

@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers\auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
+class AuthController extends Controller
+{
+    public function RegisterPage()
+    {
+        return view('auth.register');
+    }
+
+    public function LoginPage()
+    {
+        return view('auth.login');
+    }
+}

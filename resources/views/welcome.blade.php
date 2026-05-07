@@ -26,10 +26,10 @@
             <li><a href="#categories">Shop</a></li>
             <li><a href="#id-status">ID Scheduling</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="mobile-only"><a href="#" class="btn-primary">Sign In</a></li>
+            <li class="mobile-only"><a href="/login" class="btn-primary">Sign In</a></li>
         </ul>
         <div class="nav-actions">
-            <a href="#" class="btn-primary desktop-only" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Sign
+            <a href="/login" class="btn-primary desktop-only" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Sign
                 In</a>
             <div class="mobile-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
@@ -185,7 +185,7 @@
             <p style="margin-bottom: 2rem; opacity: 0.9;">Join thousands of students who trust Brahmmart for their
                 academic needs.</p>
             <div>
-                <a href="#" class="btn-primary">Get Started Now</a>
+                <a href="/register" class="btn-primary">Get Started Now</a>
             </div>
         </div>
     </div>
