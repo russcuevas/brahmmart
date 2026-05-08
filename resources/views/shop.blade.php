@@ -47,36 +47,32 @@
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Product Categories</h3>
                 <ul class="category-list">
-                    <li><a href="#" class="active">All Products</a></li>
-                    <li><a href="#">Uniforms</a></li>
-                    <li><a href="#">School Supplies</a></li>
-                    <li><a href="#">Books</a></li>
+                    <li>
+                        <a href="{{ route('shop.page', ['category' => 'all']) }}"
+                            class="{{ !request('category') || request('category') == 'all' ? 'active' : '' }}">
+                            All Products
+                        </a>
+                    </li>
+                    @foreach ($categories as $cat)
+                        <li>
+                            <a href="{{ route('shop.page', ['category' => $cat->category_name]) }}"
+                                class="{{ request('category') == $cat->category_name ? 'active' : '' }}">
+                                {{ $cat->category_name }}
+                            </a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Filter by Price</h3>
                 <div class="price-range">
-                    <input type="range" min="0" max="5000" value="2500" class="slider">
+                    <input type="range" min="0" max="5000" value="{{ request('max_price', 2500) }}"
+                        class="slider" id="priceSlider">
                     <div class="price-labels">
                         <span>₱0</span>
-                        <span>₱5,000+</span>
+                        <span id="priceValue">₱{{ number_format(request('max_price', 2500)) }}+</span>
                     </div>
-                </div>
-            </div>
-
-            <div class="sidebar-section">
-                <h3 class="sidebar-title">Department</h3>
-                <div class="filter-options">
-                    <label class="filter-item">
-                        <input type="checkbox"> <span>College</span>
-                    </label>
-                    <label class="filter-item">
-                        <input type="checkbox"> <span>Senior High School</span>
-                    </label>
-                    <label class="filter-item">
-                        <input type="checkbox"> <span>Junior High School</span>
-                    </label>
                 </div>
             </div>
         </aside>
@@ -93,13 +89,17 @@
                 </div>
 
                 <div class="shop-action-bar">
-                    <div class="shop-search-wrapper">
+                    <form action="{{ route('shop.page') }}" method="GET" class="shop-search-wrapper">
+                        @if (request('category'))
+                            <input type="hidden" name="category" value="{{ request('category') }}">
+                        @endif
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="shop-search-input" placeholder="Search for uniforms, books, supplies...">
-                        <button class="search-btn">Search</button>
-                    </div>
+                        <input type="text" name="search" class="shop-search-input" value="{{ request('search') }}"
+                            placeholder="Search for uniforms, books, supplies...">
+                        <button type="submit" class="search-btn">Search</button>
+                    </form>
                     <div class="shop-utils">
-                        <span class="results-count">Showing 6 products</span>
+                        <span class="results-count">Showing {{ count($products) }} products</span>
                         <select class="sort-select">
                             <option>Default Sorting</option>
                             <option>Price: Low to High</option>
@@ -111,149 +111,51 @@
             </div>
 
             <div class="product-grid">
-                <!-- Product 1 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Polo">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
+                @forelse ($products as $product)
+                    @php
+                        $images = json_decode($product->product_image, true);
+                        $displayImage = !empty($images) ? asset($images[0]) : asset('favicon.png');
+                    @endphp
+                    <div class="product-card">
+                        <div class="product-img">
+                            <img src="{{ $displayImage }}" alt="{{ $product->product_name }}">
+                            <div class="product-actions">
+                                <button title="Quick View" onclick="location.href='/product/{{ $product->id }}'"><i
+                                        class="far fa-eye"></i></button>
+                                @if (!$product->has_variant)
+                                    <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <span class="product-cat">{{ $product->category_name }}</span>
+                            <h4 class="product-name">{{ $product->product_name }}</h4>
+                            <div class="product-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span>(0)</span>
+                            </div>
+                            <div class="product-price">
+                                @if ($product->has_variant)
+                                    <span
+                                        style="font-size: 12px; color: var(--text-muted); font-weight: 400;">From</span>
+                                @endif
+                                ₱{{ number_format($product->display_price, 2) }}
+                            </div>
                         </div>
                     </div>
-                    <div class="product-info">
-                        <span class="product-cat">Uniforms</span>
-                        <h4 class="product-name">UB Type A Female College Blouse</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(186)</span>
-                        </div>
-                        <div class="product-price">₱620.00</div>
+                @empty
+                    <div
+                        style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <i class="fas fa-box-open"
+                            style="font-size: 3rem; margin-bottom: 1rem; display: block; opacity: 0.5;"></i>
+                        <h3 style="font-size: 1.5rem; color: var(--text-dark);">No Product displayed</h3>
+                        <p>We're currently restocking our inventory. Please check back later!</p>
                     </div>
-                </div>
-
-                <!-- Product 2 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="{{ asset('assets/images/vest-girl/piece.jpeg') }}" alt="Vest">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">Uniforms</span>
-                        <h4 class="product-name">UB Official School Vest</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(42)</span>
-                        </div>
-                        <div class="product-price">₱520.00</div>
-                    </div>
-                </div>
-
-                <!-- Product 3 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Skirt">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">Uniforms</span>
-                        <h4 class="product-name">UB Official School Skirt</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                            <span>(128)</span>
-                        </div>
-                        <div class="product-price">₱380.00</div>
-                    </div>
-                </div>
-
-                <!-- Product 4 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=2048&auto=format&fit=crop"
-                            alt="Notebook">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
-                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">School Supplies</span>
-                        <h4 class="product-name">UB Premium Hardbound Notebook</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(512)</span>
-                        </div>
-                        <div class="product-price">₱185.00</div>
-                    </div>
-                </div>
-
-                <!-- Product 5 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1512418490979-92798ccc1380?q=80&w=2040&auto=format&fit=crop"
-                            alt="Bag">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
-                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">School Supplies</span>
-                        <h4 class="product-name">Brahmmart Official Backpack</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <span>(2.4k)</span>
-                        </div>
-                        <div class="product-price">₱1,250.00</div>
-                    </div>
-                </div>
-
-                <!-- Product 6 -->
-                <div class="product-card">
-                    <div class="product-img">
-                        <img src="https://images.unsplash.com/photo-1544640808-32ca72ac7f37?q=80&w=2070&auto=format&fit=crop"
-                            alt="Book">
-                        <div class="product-actions">
-                            <button title="Quick View"><i class="far fa-eye"></i></button>
-                            <button title="Add to Cart"><i class="fas fa-cart-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <span class="product-cat">Books</span>
-                        <h4 class="product-name">Intro to Computer Science — Textbook</h4>
-                        <div class="product-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                            <span>(15)</span>
-                        </div>
-                        <div class="product-price">₱850.00</div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </main>
     </div>
@@ -381,6 +283,24 @@
         if (cartClose) cartClose.addEventListener('click', toggleCart);
         if (cartOverlay) cartOverlay.addEventListener('click', toggleCart);
         if (continueShopping) continueShopping.addEventListener('click', toggleCart);
+
+        // ===== PRICE SLIDER DYNAMIC UPDATE =====
+        const priceSlider = document.getElementById('priceSlider');
+        const priceValue = document.getElementById('priceValue');
+
+        if (priceSlider && priceValue) {
+            priceSlider.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value).toLocaleString();
+                priceValue.textContent = `₱${value}+`;
+            });
+
+            priceSlider.addEventListener('change', (e) => {
+                const maxPrice = e.target.value;
+                const url = new URL(window.location.href);
+                url.searchParams.set('max_price', maxPrice);
+                window.location.href = url.toString();
+            });
+        }
     </script>
 </body>
 
