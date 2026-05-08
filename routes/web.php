@@ -25,6 +25,8 @@ Route::get('/', function () {
 
 // GUEST ROUTES
 Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.register.page');
+Route::post('/register', [AuthController::class, 'RegisterRequest'])->name('auth.register.request');
+Route::get('/verify-email/{email}/{token}', [AuthController::class, 'VerifyEmail'])->name('auth.verify.email');
 Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.page');
 Route::post('/login', [AuthController::class, 'LoginRequest'])->name('auth.login.request');
 Route::post('/logout', [AuthController::class, 'Logout'])->name('auth.logout');

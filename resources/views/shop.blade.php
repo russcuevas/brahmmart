@@ -27,9 +27,25 @@
                 <i class="fas fa-bag-shopping"></i>
                 <span class="cart-count">2</span>
             </button>
-            <a href="/login" class="shop-nav-icon" aria-label="Account">
-                <i class="fas fa-user"></i>
-            </a>
+            @if (Auth::guard('customer')->check())
+                <div class="user-info-shop" style="display: flex; align-items: center; gap: 15px;">
+                    <span class="user-name" style="font-weight: 500; font-size: 14px; color: var(--text-dark);">
+                        {{ Auth::guard('customer')->user()->fullname }} <br>
+                        {{ Auth::guard('customer')->user()->email }}
+                    </span>
+                    <form action="{{ route('auth.logout') }}" method="POST" style="margin: 0;">
+                        @csrf
+                        <button type="submit" class="shop-nav-icon" title="Logout"
+                            style="background: none; border: none; cursor: pointer; color: #752738;">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </form>
+                </div>
+            @else
+                <a href="/login" class="shop-nav-icon" aria-label="Account">
+                    <i class="fas fa-user"></i>
+                </a>
+            @endif
 
         </div>
     </nav>
