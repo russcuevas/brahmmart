@@ -26,11 +26,28 @@
             <li><a href="/shop">Shop</a></li>
             <li><a href="#id-status">ID Scheduling</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="mobile-only"><a href="/login" class="btn-primary">Sign In</a></li>
+            @if (Auth::guard('admin')->check())
+                <li class="mobile-only"><a href="{{ route('admin.dashboard.page') }}" class="btn-primary">Admin
+                        Dashboard</a></li>
+            @elseif(Auth::guard('customer')->check())
+                <li class="mobile-only"><a href="{{ route('customer.dashboard.page') }}" class="btn-primary">Customer
+                        Dashboard</a></li>
+            @else
+                <li class="mobile-only"><a href="/login" class="btn-primary">Sign In</a></li>
+            @endif
         </ul>
         <div class="nav-actions">
-            <a href="/login" class="btn-primary desktop-only" style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Sign
-                In</a>
+            @if (Auth::guard('admin')->check())
+                <a href="{{ route('admin.dashboard.page') }}" class="btn-primary desktop-only"
+                    style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Dashboard</a>
+            @elseif(Auth::guard('customer')->check())
+                <a href="{{ route('customer.dashboard.page') }}" class="btn-primary desktop-only"
+                    style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Dashboard</a>
+            @else
+                <a href="/login" class="btn-primary desktop-only"
+                    style="padding: 0.6rem 1.5rem; font-size: 0.9rem;">Sign
+                    In</a>
+            @endif
             <div class="mobile-toggle" id="menu-toggle">
                 <i class="fas fa-bars"></i>
             </div>

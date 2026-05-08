@@ -25,11 +25,6 @@ Route::get('/', function () {
 
 
 // GUEST ROUTES
-Route::post('/cart/add', [CartController::class, 'AddToCart'])->name('cart.add');
-Route::get('/cart/get', [CartController::class, 'GetCart'])->name('cart.get');
-Route::post('/cart/update', [CartController::class, 'UpdateQuantity'])->name('cart.update');
-Route::delete('/cart/remove/{id}', [CartController::class, 'RemoveItem'])->name('cart.remove');
-Route::get('/product/details/{id}', [ShopController::class, 'GetProductDetails'])->name('product.details');
 Route::get('/register', [AuthController::class, 'RegisterPage'])->name('auth.register.page');
 Route::post('/register', [AuthController::class, 'RegisterRequest'])->name('auth.register.request');
 Route::get('/verify-email/{email}/{token}', [AuthController::class, 'VerifyEmail'])->name('auth.verify.email');
@@ -38,6 +33,7 @@ Route::post('/login', [AuthController::class, 'LoginRequest'])->name('auth.login
 Route::post('/logout', [AuthController::class, 'Logout'])->name('auth.logout');
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
 Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
+Route::get('/product/details/{id}', [ShopController::class, 'GetProductDetails'])->name('product.details');
 
 
 // ADMIN ROUTES
@@ -51,4 +47,10 @@ Route::middleware(['admin'])->group(function () {
 
 
 // CUSTOMER ROUTES
-Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard.page');
+Route::middleware(['customer'])->group(function () {
+    Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard.page');
+    Route::post('/cart/add', [CartController::class, 'AddToCart'])->name('cart.add');
+    Route::get('/cart/get', [CartController::class, 'GetCart'])->name('cart.get');
+    Route::post('/cart/update', [CartController::class, 'UpdateQuantity'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'RemoveItem'])->name('cart.remove');
+});

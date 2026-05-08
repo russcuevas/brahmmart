@@ -94,7 +94,7 @@ class AuthController extends Controller
                 Auth::guard('customer')->logout();
                 return redirect()->back()->withInput($request->only('email'))->with('error', 'Please verify your email address before logging in.');
             }
-            return redirect()->route('shop.page')->with('success', 'Welcome back!');
+            return redirect()->route('customer.dashboard.page')->with('success', 'Welcome back!');
         }
 
         return redirect()->back()->withInput($request->only('email'))->with('error', 'Invalid credentials');

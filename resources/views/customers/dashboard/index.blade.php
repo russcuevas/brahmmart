@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/customers/dashboard.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -66,15 +67,20 @@
 
             {{-- Sidebar Footer --}}
             <div class="sidebar-footer">
-                <div class="sidebar-user">
+                <div class="sidebar-user"
+                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                    style="cursor: pointer;">
                     <div class="sidebar-user-avatar"><img style="height: 50px; width: 50px;"
                             src="{{ asset('favicon.png') }}" alt="">
                     </div>
                     <div class="sidebar-user-info">
-                        <h4>2420580@ub.edu.ph</h4>
+                        <h4>{{ Auth::guard('customer')->user()->email }}</h4>
                         <span>Logout</span>
                     </div>
                 </div>
+                <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
             </div>
         </aside>
 
@@ -89,7 +95,7 @@
                     </button>
                     <div class="header-greeting">
                         <h1>Dashboard</h1>
-                        <p id="greetingText">Welcome back, Student</p>
+                        <p id="greetingText">Welcome back, {{ Auth::guard('customer')->user()->fullname }}</p>
                     </div>
                 </div>
                 <div class="header-right">
@@ -236,7 +242,34 @@
         let greeting = 'Good evening';
         if (hour < 12) greeting = 'Good morning';
         else if (hour < 18) greeting = 'Good afternoon';
-        greetingEl.textContent = `${greeting}, Student`;
+        greetingEl.textContent = `${greeting}, {{ Auth::guard('customer')->user()->fullname }}`;
+
+        // ===== TOAST NOTIFICATIONS =====
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        @if (session('success'))
+            Toast.fire({
+                icon: 'success',
+                title: '{{ session('success') }}'
+            });
+        @endif
+
+        @if (session('error'))
+            Toast.fire({
+                icon: 'error',
+                title: '{{ session('error') }}'
+            });
+        @endif
     </script>
 </body>
 
