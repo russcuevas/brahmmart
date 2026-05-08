@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\InventoryController;
 use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\customers\CustomersDashboardController;
 use App\Http\Controllers\ShopController;
@@ -34,6 +35,10 @@ Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->nam
 // ADMIN ROUTES
 Route::middleware(['admin'])->group(function () {
     Route::get('/admin/dashboard', [DashboardController::class, 'DashboardPage'])->name('admin.dashboard.page');
+    Route::get('/admin/inventory', [InventoryController::class, 'InventoryPage'])->name('admin.inventory.page');
+    Route::post('/admin/inventory', [InventoryController::class, 'StoreProduct'])->name('admin.inventory.store');
+    Route::put('/admin/inventory/{id}', [InventoryController::class, 'UpdateProduct'])->name('admin.inventory.update');
+    Route::delete('/admin/inventory/{id}', [InventoryController::class, 'DeleteProduct'])->name('admin.inventory.delete');
 });
 
 

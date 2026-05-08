@@ -34,7 +34,7 @@
             <nav class="sidebar-nav">
                 <div class="sidebar-nav-label">Main Menu</div>
 
-                <a href="{{ route('admin.dashboard.page') }}" class="sidebar-nav-item active" id="nav-dashboard">
+                <a href="{{ route('admin.dashboard.page') }}" class="sidebar-nav-item {{ request()->routeIs('admin.dashboard.page') ? 'active' : '' }}" id="nav-dashboard">
                     <i class="fas fa-home"></i>
                     Dashboard
                 </a>
@@ -58,10 +58,9 @@
                     <span class="nav-badge">30</span>
                 </a>
 
-                <a href="#" class="sidebar-nav-item" id="nav-inventory">
+                <a href="{{ route('admin.inventory.page') }}" class="sidebar-nav-item {{ request()->routeIs('admin.inventory.page') ? 'active' : '' }}" id="nav-inventory">
                     <i class="fas fa-boxes-stacked"></i>
                     Inventory
-                    <span class="nav-badge">156</span>
                 </a>
 
                 <div class="sidebar-nav-label" style="margin-top: 16px;">Management</div>

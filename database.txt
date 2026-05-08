@@ -29,7 +29,7 @@ product_image
 stocks
 has_variant -> boolean (if true, then it has variants, if false, then it has no variants)
 
-product_variant
+products_variant
 product_id -> foreign to products table
 size 
 price
