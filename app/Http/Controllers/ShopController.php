@@ -37,22 +37,58 @@ class ShopController extends Controller
 
         $products = $query->orderBy('products.id', 'desc')->get();
 
-        // Attach display price (base price or min variant price)
+        // Attach display price (min and max variant price if applicable)
         foreach ($products as $product) {
             if ($product->has_variant) {
-                $minPrice = \Illuminate\Support\Facades\DB::table('products_variants')
+                $variantData = \Illuminate\Support\Facades\DB::table('products_variants')
                     ->where('product_id', $product->id)
-                    ->min('price');
-                $product->display_price = $minPrice;
+                    ->get();
+                
+                $product->min_price = $variantData->min('price');
+                $product->max_price = $variantData->max('price');
+                $product->display_price = $product->min_price;
+                $product->available_sizes = $variantData->pluck('size')->implode(', ');
             } else {
                 $product->display_price = $product->product_price;
+                $product->min_price = $product->product_price;
+                $product->max_price = $product->product_price;
             }
         }
 
         $categories = \Illuminate\Support\Facades\DB::table('categories')->get();
 
-        return view('shop', compact('products', 'categories'));
+        $cartItems = [];
+        if (\Illuminate\Support\Facades\Auth::guard('customer')->check()) {
+            $cartItems = \App\Models\Carts::with(['product', 'variant'])
+                ->where('customer_id', \Illuminate\Support\Facades\Auth::guard('customer')->id())
+                ->get();
+        }
+
+        return view('shop', compact('products', 'categories', 'cartItems'));
     }
+    public function GetProductDetails($id)
+    {
+        $product = \Illuminate\Support\Facades\DB::table('products')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->select('products.*', 'categories.category_name')
+            ->where('products.id', $id)
+            ->first();
+
+        if (!$product) {
+            return response()->json(['status' => 'error', 'message' => 'Product not found.'], 404);
+        }
+
+        $variants = \Illuminate\Support\Facades\DB::table('products_variants')
+            ->where('product_id', $id)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'product' => $product,
+            'variants' => $variants
+        ]);
+    }
+
     public function SingleProductPage()
     {
         return view('single_product');

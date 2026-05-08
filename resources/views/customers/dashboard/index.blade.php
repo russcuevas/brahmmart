@@ -54,12 +54,12 @@
 
                 <a href="{{ route('shop.page') }}" class="sidebar-nav-item">
                     <i class="fas fa-shop"></i>
-                    Back to Shop
+                    Shop
                 </a>
 
                 <a href="/" class="sidebar-nav-item">
                     <i class="fas fa-house"></i>
-                    Back to Home
+                    Home
                 </a>
 
             </nav>
