@@ -78,6 +78,7 @@ class InventoryController extends Controller
             'product_description' => $request->product_description,
             'product_price' => !$hasVariant ? $request->product_price : null,
             'product_image' => json_encode($images),
+            'gender' => $request->gender,
             'stocks' => !$hasVariant ? $request->stocks : null,
             'has_variant' => $hasVariant,
             'created_at' => now(),
@@ -140,6 +141,7 @@ class InventoryController extends Controller
             'product_name' => $request->product_name,
             'product_description' => $request->product_description,
             'product_image' => json_encode($images),
+            'gender' => $request->gender,
             'has_variant' => $request->has('has_variant'),
             'updated_at' => now(),
         ];

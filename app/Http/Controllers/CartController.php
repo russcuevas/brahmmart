@@ -11,7 +11,7 @@ class CartController extends Controller
     public function AddToCart(Request $request)
     {
         if (!Auth::guard('customer')->check()) {
-            return response()->json(['status' => 'error', 'message' => 'Please login to add items to cart.'], 401);
+            return response()->json(['status' => 'error', 'message' => 'Please login first to add items to cart.'], 401);
         }
 
         $customer_id = Auth::guard('customer')->id();
@@ -43,7 +43,7 @@ class CartController extends Controller
     {
         $cartItems = [];
         if (Auth::guard('customer')->check()) {
-            $cartItems = Carts::with(['product', 'variant'])
+            $cartItems = Carts::with(['product.uniformCategory', 'variant'])
                 ->where('customer_id', Auth::guard('customer')->id())
                 ->get();
         }

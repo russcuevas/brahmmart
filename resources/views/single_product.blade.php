@@ -8,6 +8,99 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/customers/single_product.css') }}">
+    <style>
+        /* ===== USER DROPDOWN STYLES ===== */
+        .user-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 15px);
+            right: 0;
+            background: #fff;
+            min-width: 240px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: none;
+            z-index: 2100;
+            border: 1px solid #f0f0f0;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-dropdown-menu.active {
+            display: block;
+        }
+
+        .user-dropdown-header {
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f8f9fa;
+            margin-bottom: 12px;
+        }
+
+        .user-dropdown-name {
+            display: block;
+            font-weight: 700;
+            color: #2d3436;
+            font-size: 0.95rem;
+        }
+
+        .user-dropdown-email {
+            display: block;
+            font-size: 0.8rem;
+            color: #636e72;
+            margin-top: 2px;
+        }
+
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            color: #2d3436;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: 0.2s;
+            cursor: pointer;
+            width: 100%;
+            border: none;
+            background: none;
+            text-align: left;
+        }
+
+        .user-dropdown-item:hover {
+            background: #f8f9fa;
+            color: #752738;
+        }
+
+        .user-dropdown-item i {
+            font-size: 1rem;
+            color: #752738;
+        }
+
+        .shop-logo-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 
 <body>
@@ -16,16 +109,42 @@
     <nav class="shop-nav">
         <a href="/" class="shop-nav-brand">
             <img src="{{ asset('favicon.png') }}" alt="BRAHMMART">
-            <h2>BRAHMMART</h2>
+            <span class="shop-logo-text">BRAHMMART</span>
         </a>
+
         <div class="shop-nav-actions">
             <button class="shop-nav-icon" id="cartToggleBtn" aria-label="Cart">
                 <i class="fas fa-bag-shopping"></i>
-                <span class="cart-count">2</span>
+                <span class="cart-count">{{ count($cartItems) }}</span>
             </button>
-            <a href="/login" class="shop-nav-icon" aria-label="Account">
-                <i class="fas fa-user"></i>
-            </a>
+            @if (Auth::guard('customer')->check())
+                <div class="user-dropdown">
+                    <button class="shop-nav-icon" id="userDropdownBtn" title="Account">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                        <div class="user-dropdown-header">
+                            <span class="user-dropdown-name">{{ Auth::guard('customer')->user()->fullname }}</span>
+                            <span class="user-dropdown-email">{{ Auth::guard('customer')->user()->email }}</span>
+                        </div>
+                        <a href="/students/dashboard" class="user-dropdown-item">
+                            <i class="fas fa-columns"></i>
+                            My Dashboard
+                        </a>
+                        <form action="{{ route('auth.logout') }}" method="POST" id="logoutForm">
+                            @csrf
+                            <button type="submit" class="user-dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Logout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a href="/login" class="shop-nav-icon" aria-label="Account">
+                    <i class="fas fa-user"></i>
+                </a>
+            @endif
         </div>
     </nav>
 
@@ -35,9 +154,14 @@
         <i class="fas fa-chevron-right"></i>
         <a href="{{ route('shop.page') }}">Shop</a>
         <i class="fas fa-chevron-right"></i>
-        <a href="#">Uniforms</a>
+        <a href="{{ route('shop.page', ['category' => $product->category_name]) }}">{{ $product->category_name }}</a>
         <i class="fas fa-chevron-right"></i>
-        <span class="current">UB Official School Polo</span>
+        <span class="current">
+            @if ($product->uniform_name)
+                {{ $product->uniform_name }} -
+            @endif
+            {{ $product->product_name }}
+        </span>
     </div>
 
     {{-- ===== PRODUCT PAGE ===== --}}
@@ -45,40 +169,38 @@
 
         {{-- === LEFT: Product Images === --}}
         <div class="product-images">
+            @php
+                $images = json_decode($product->product_image, true) ?: [];
+                $mainImg = !empty($images) ? asset($images[0]) : asset('favicon.png');
+            @endphp
             <div class="product-main-img" id="mainImgWrap">
-                <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="UB Official School Polo"
-                    id="mainProductImg">
+                <img src="{{ $mainImg }}" alt="{{ $product->product_name }}" id="mainProductImg">
             </div>
             <div class="product-thumbs">
-                <div class="product-thumb active"
-                    onclick="changeImage('{{ asset('assets/images/polo-girl/1.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Polo Front">
-                </div>
-                <div class="product-thumb" onclick="changeImage('{{ asset('assets/images/polo-girl/2.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/2.jpeg') }}" alt="Polo Side">
-                </div>
-                <div class="product-thumb" onclick="changeImage('{{ asset('assets/images/polo-girl/3.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/3.jpeg') }}" alt="Polo Back">
-                </div>
-                <div class="product-thumb"
-                    onclick="changeImage('{{ asset('assets/images/polo-girl/4.jpeg') }}', this)">
-                    <img src="{{ asset('assets/images/polo-girl/4.jpeg') }}" alt="Polo Back">
-                </div>
+                @foreach ($images as $index => $img)
+                    <div class="product-thumb {{ $index === 0 ? 'active' : '' }}"
+                        onclick="changeImage('{{ asset($img) }}', this)">
+                        <img src="{{ asset($img) }}" alt="{{ $product->product_name }}">
+                    </div>
+                @endforeach
             </div>
         </div>
 
         {{-- === CENTER: Product Details === --}}
         <div class="product-details">
-            <a href="#" class="product-store">
+            <a href="{{ route('shop.page') }}" class="product-store">
                 <i class="fas fa-store"></i> Visit BRAHMMART Store
             </a>
 
-            <h1 class="product-title">UB Type A Female College Blouse</h1>
+            <h1 class="product-title">
+                @if ($product->uniform_name)
+                    {{ $product->uniform_name }} -
+                @endif
+                {{ $product->product_name }}
+            </h1>
 
             <p class="product-description">
-                The official University of Batangas school polo is crafted from premium cotton-polyester blend for
-                lasting comfort. Features an embroidered UB logo, reinforced stitching, and a classic fit that meets
-                school dress code standards. Designed for everyday wear throughout the academic year.
+                {{ $product->product_description ?: 'No description available for this product.' }}
             </p>
 
             {{-- Ratings --}}
@@ -96,26 +218,32 @@
             </div>
 
             {{-- Size Selector --}}
-            <label class="product-option-label">Size:</label>
-            <div class="size-selector" id="sizeSelector">
-                <button class="size-btn" data-size="S" onclick="selectSize(this)">S</button>
-                <button class="size-btn active" data-size="M" onclick="selectSize(this)">M</button>
-                <button class="size-btn" data-size="L" onclick="selectSize(this)">L</button>
-                <button class="size-btn" data-size="XL" onclick="selectSize(this)">XL</button>
-                <button class="size-btn" data-size="2XL" onclick="selectSize(this)">2XL</button>
-                <button class="size-btn" data-size="3XL" onclick="selectSize(this)">3XL</button>
-                <button class="size-btn" data-size="4XL" onclick="selectSize(this)">4XL</button>
-                <button class="size-btn" data-size="5XL" onclick="selectSize(this)">5XL</button>
-                <button class="size-btn" data-size="6XL" onclick="selectSize(this)">6XL</button>
-            </div>
+            @if ($product->has_variant)
+                <label class="product-option-label">Size:</label>
+                <div class="size-selector" id="sizeSelector">
+                    @foreach ($variants as $index => $v)
+                        <button class="size-btn {{ $index === 0 ? 'active' : '' }}" data-size="{{ $v->size }}"
+                            data-price="{{ $v->price }}" data-variant-id="{{ $v->id }}"
+                            data-stock="{{ $v->stocks }}" onclick="selectVariant(this)">
+                            {{ $v->size }}
+                        </button>
+                    @endforeach
+                </div>
+            @endif
 
             {{-- Stock Warning --}}
             <div class="stock-warning">
                 <i class="fas fa-fire"></i>
                 <div>
-                    <p>There are just <strong>5</strong> left in stock, so please act immediately.</p>
+                    <p id="stockWarningText">
+                        @if ($product->has_variant)
+                            Only <strong>{{ $variants[0]->stocks }}</strong> left in stock!
+                        @else
+                            Only <strong>{{ $product->stocks }}</strong> left in stock!
+                        @endif
+                    </p>
                     <div class="stock-bar">
-                        <div class="stock-bar-fill" style="width: 15%;"></div>
+                        <div class="stock-bar-fill" id="stockBarFill" style="width: 45%;"></div>
                     </div>
                 </div>
             </div>
@@ -132,24 +260,29 @@
                 <h4>About Item</h4>
                 <div class="about-table">
                     <div class="about-table-row">
-                        <div class="about-table-cell label">Material</div>
-                        <div class="about-table-cell value">Cotton-Poly Blend</div>
-                    </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">Type</div>
-                        <div class="about-table-cell value">School Polo</div>
-                    </div>
-                    <div class="about-table-row">
-                        <div class="about-table-cell label">For</div>
-                        <div class="about-table-cell value">All Departments</div>
-                    </div>
-                    <div class="about-table-row">
                         <div class="about-table-cell label">Category</div>
-                        <div class="about-table-cell value">Official Uniform</div>
+                        <div class="about-table-cell value">{{ $product->category_name }}</div>
                     </div>
+                    @if ($product->category_name === 'Uniforms' && $product->gender)
+                        <div class="about-table-row">
+                            <div class="about-table-cell label">Gender</div>
+                            <div class="about-table-cell value" style="color: #752738; font-weight: 700;">
+                                {{ $product->gender }}
+                            </div>
+                        </div>
+                    @endif
                     <div class="about-table-row">
-                        <div class="about-table-cell label">Care</div>
-                        <div class="about-table-cell value">Machine Washable</div>
+                        <div class="about-table-cell label">Stock Status</div>
+                        <div class="about-table-cell value">
+                            @php
+                                $totalStock = $product->has_variant ? $variants->sum('stocks') : $product->stocks;
+                            @endphp
+                            @if ($totalStock > 0)
+                                <span style="color: #27ae60; font-weight: 700;">In Stock</span>
+                            @else
+                                <span style="color: #e74c3c; font-weight: 700;">Out of Stock</span>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -162,11 +295,17 @@
                 {{-- Selected Variant --}}
                 <div class="selected-variant">
                     <div class="variant-thumb">
-                        <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Selected">
+                        <img src="{{ $mainImg }}" alt="Selected" id="sideVariantImg">
                     </div>
                     <div class="variant-info">
-                        <span>Selected Variant</span>
-                        <strong id="selectedVariantText">Size M — UB Type A Female College Blouse</strong>
+                        <span>Selected Item</span>
+                        <strong id="selectedVariantText">
+                            @if ($product->has_variant)
+                                Size {{ $variants[0]->size }} — {{ $product->product_name }}
+                            @else
+                                {{ $product->product_name }}
+                            @endif
+                        </strong>
                     </div>
                 </div>
 
@@ -181,13 +320,17 @@
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
-                    <span class="stock-info">Stock: <strong>856</strong></span>
+                    <span class="stock-info">Stock: <strong id="sidebarStock">
+                            {{ $product->has_variant ? $variants[0]->stocks : $product->stocks }}
+                        </strong></span>
                 </div>
 
                 {{-- Price --}}
                 <div class="purchase-price">
                     <span class="price-label">Total Price:</span>
-                    <span class="price-value" id="totalPrice">₱620.00</span>
+                    <span class="price-value" id="totalPrice">
+                        ₱{{ number_format($product->has_variant ? $variants[0]->price : $product->product_price, 2) }}
+                    </span>
                 </div>
 
                 {{-- Buttons --}}
@@ -195,7 +338,8 @@
                     <button class="btn-buy primary" id="buyNowBtn">
                         Buy Now
                     </button>
-                    <button class="btn-buy secondary" id="addToBagBtn">
+                    <button class="btn-buy secondary" id="addToBagBtn"
+                        onclick="handleAddToBag({{ $product->id }})">
                         <i class="fas fa-lock"></i> Add To Bag
                     </button>
                 </div>
@@ -205,45 +349,34 @@
             <div class="new-products-card">
                 <h4>Other Products</h4>
 
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/vest-girl/piece.jpeg') }}" alt="Vest">
+                @foreach ($otherProducts as $op)
+                    @php
+                        $opImages = json_decode($op->product_image, true) ?: [];
+                        $opMainImg = !empty($opImages) ? asset($opImages[0]) : asset('favicon.png');
+                    @endphp
+                    <div class="new-product-item"
+                        onclick="location.href='{{ route('single.product.page', $op->id) }}'"
+                        style="cursor: pointer;">
+                        <div class="new-product-thumb">
+                            <img src="{{ $opMainImg }}" alt="{{ $op->product_name }}">
+                        </div>
+                        <div class="new-product-info">
+                            <h5>
+                                @if ($op->uniform_name)
+                                    {{ $op->uniform_name }} -
+                                @endif
+                                {{ $op->product_name }}
+                            </h5>
+                            <span class="new-price">
+                                @if ($op->has_variant && $op->min_price != $op->max_price)
+                                    ₱{{ number_format($op->min_price, 2) }} - ₱{{ number_format($op->max_price, 2) }}
+                                @else
+                                    ₱{{ number_format($op->min_price, 2) }}
+                                @endif
+                            </span>
+                        </div>
                     </div>
-                    <div class="new-product-info">
-                        <h5>UB Official School Vest</h5>
-                        <span class="new-price">₱520.00 <span class="old-price">₱650.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/criminology-uniform/set.jpeg') }}" alt="Crim Set">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>Criminology Uniform Set</h5>
-                        <span class="new-price">₱1,850.00 <span class="old-price">₱2,200.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Skirt">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>UB Official School Skirt</h5>
-                        <span class="new-price">₱380.00 <span class="old-price">₱450.00</span></span>
-                    </div>
-                </div>
-
-                <div class="new-product-item">
-                    <div class="new-product-thumb">
-                        <img src="{{ asset('assets/images/essentials-girl/necktie.jpeg') }}" alt="Necktie">
-                    </div>
-                    <div class="new-product-info">
-                        <h5>UB Necktie — Official</h5>
-                        <span class="new-price">₱150.00 <span class="old-price">₱180.00</span></span>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -251,84 +384,10 @@
     {{-- ===== CART DRAWER ===== --}}
     <div class="cart-drawer-overlay" id="cartOverlay"></div>
     <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-drawer-header">
-            <div class="cart-header-left">
-                <h3>Shopping Bag</h3>
-                <span class="cart-badge-count">2 Items</span>
-            </div>
-            <button class="cart-drawer-close" id="cartClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <div class="cart-drawer-items">
-            <!-- Item 1 -->
-            <div class="cart-item">
-                <div class="cart-item-img">
-                    <img src="{{ asset('assets/images/polo-girl/1.jpeg') }}" alt="Product">
-                </div>
-                <div class="cart-item-info">
-                    <div class="cart-item-top">
-                        <h4>UB Type A Female Blouse</h4>
-                        <button class="cart-item-remove"><i class="fas fa-trash-can"></i></button>
-                    </div>
-                    <span class="cart-item-variant">Size: M</span>
-                    <div class="cart-item-bottom">
-                        <div class="cart-item-qty">
-                            <button class="qty-btn-cart"><i class="fas fa-minus"></i></button>
-                            <span>1</span>
-                            <button class="qty-btn-cart"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <div class="cart-item-price">₱620.00</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="cart-item">
-                <div class="cart-item-img">
-                    <img src="{{ asset('assets/images/palda-girl/piece.jpeg') }}" alt="Product">
-                </div>
-                <div class="cart-item-info">
-                    <div class="cart-item-top">
-                        <h4>UB Official School Skirt</h4>
-                        <button class="cart-item-remove"><i class="fas fa-trash-can"></i></button>
-                    </div>
-                    <span class="cart-item-variant">Size: M</span>
-                    <div class="cart-item-bottom">
-                        <div class="cart-item-qty">
-                            <button class="qty-btn-cart"><i class="fas fa-minus"></i></button>
-                            <span>1</span>
-                            <button class="qty-btn-cart"><i class="fas fa-plus"></i></button>
-                        </div>
-                        <div class="cart-item-price">₱380.00</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="cart-drawer-footer">
-            <div class="cart-summary">
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span>₱1,000.00</span>
-                </div>
-                <div class="summary-row">
-                    <span>Shipping</span>
-                    <span class="free-shipping">FREE</span>
-                </div>
-                <div class="summary-total">
-                    <span>Total</span>
-                    <span>₱1,000.00</span>
-                </div>
-            </div>
-            <div class="cart-actions">
-                <button class="btn-checkout-cart">Checkout Now</button>
-                <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
-            </div>
-        </div>
+        @include('components.cart_drawer_content', ['cartItems' => $cartItems])
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // ===== IMAGE SWITCHER =====
         function changeImage(src, thumbEl) {
@@ -337,38 +396,209 @@
             thumbEl.classList.add('active');
         }
 
-        // ===== SIZE SELECTOR =====
-        const basePrice = 480;
+        // ===== VARIANT SELECTION =====
+        let selectedVariantId = {{ $product->has_variant ? $variants[0]->id ?? 'null' : 'null' }};
+        let currentPrice = {{ $product->has_variant ? $variants[0]->price ?? 0 : $product->product_price }};
+        let currentStock = {{ $product->has_variant ? $variants[0]->stocks ?? 0 : $product->stocks }};
+        let qty = 1;
 
-        function selectSize(btn) {
+        function selectVariant(btn) {
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
             const size = btn.dataset.size;
-            document.getElementById('selectedVariantText').textContent = `Size ${size} — School Polo`;
-            updatePrice();
+            selectedVariantId = btn.dataset.variantId;
+            currentPrice = parseFloat(btn.dataset.price);
+            currentStock = parseInt(btn.dataset.stock);
+
+            document.getElementById('selectedVariantText').textContent = `Size ${size} — {{ $product->product_name }}`;
+            document.getElementById('sidebarStock').textContent = currentStock;
+            document.getElementById('stockWarningText').innerHTML = `Only <strong>${currentStock}</strong> left in stock!`;
+
+            // Reset qty if it exceeds new stock
+            if (qty > currentStock) qty = currentStock;
+            if (currentStock === 0) qty = 0;
+            document.getElementById('qtyValue').textContent = qty;
+
+            updatePriceDisplay();
         }
 
         // ===== QUANTITY =====
-        let qty = 1;
-
         function updateQty(change) {
-            qty = Math.max(1, Math.min(qty + change, 856));
+            if (currentStock === 0) return;
+            let newVal = qty + change;
+            if (newVal < 1) newVal = 1;
+            if (newVal > currentStock) {
+                newVal = currentStock;
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Maximum stock reached'
+                });
+            }
+            qty = newVal;
             document.getElementById('qtyValue').textContent = qty;
-            updatePrice();
+            updatePriceDisplay();
         }
 
-        function updatePrice() {
-            const total = (basePrice * qty).toLocaleString('en-PH', {
-                minimumFractionDigits: 2
+        function updatePriceDisplay() {
+            const total = (currentPrice * qty).toLocaleString('en-PH', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             });
             document.getElementById('totalPrice').textContent = `₱${total}`;
         }
-        // ===== CART DRAWER =====
+
+        // ===== CART ACTIONS =====
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        function handleAddToBag(productId) {
+            @if (!Auth::guard('customer')->check())
+                window.location.href = '{{ route('auth.login.page') }}';
+                return;
+            @endif
+
+            if ({{ $product->has_variant ? 'true' : 'false' }} && !selectedVariantId) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Please select a size'
+                });
+                return;
+            }
+
+            if (qty < 1) {
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Please select quantity'
+                });
+                return;
+            }
+
+            fetch('{{ route('cart.add') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        variant_id: selectedVariantId,
+                        quantity: qty
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: data.message
+                        });
+                        fetchCart();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.message
+                        });
+                    }
+                });
+        }
+
+        function fetchCart() {
+            fetch('{{ route('cart.get') }}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('cartDrawer').innerHTML = html;
+                    rebindCartEvents();
+                    updateCartBadge();
+                });
+        }
+
+        function rebindCartEvents() {
+            const closeBtn = document.getElementById('cartClose');
+            if (closeBtn) closeBtn.onclick = toggleCart;
+            const continueBtn = document.getElementById('continueShopping');
+            if (continueBtn) continueBtn.onclick = toggleCart;
+        }
+
+        function updateCartBadge() {
+            const badgeCount = document.querySelector('.cart-badge-count');
+            if (badgeCount) {
+                const count = badgeCount.textContent.split(' ')[0];
+                document.querySelector('.cart-count').textContent = count;
+            }
+        }
+
+        window.updateCartQty = function(id, change) {
+            fetch('{{ route('cart.update') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        id,
+                        change
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        fetchCart();
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: data.message
+                        });
+                    }
+                });
+        }
+
+        window.removeFromCart = function(id) {
+            Swal.fire({
+                title: 'Remove item?',
+                text: "Are you sure you want to remove this item from your bag?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#752738',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`{{ url('/cart/remove') }}/${id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: data.message
+                                });
+                                fetchCart();
+                            }
+                        });
+                }
+            });
+        }
+
+        // ===== UI TOGGLES =====
         const cartToggleBtn = document.getElementById('cartToggleBtn');
         const cartDrawer = document.getElementById('cartDrawer');
         const cartOverlay = document.getElementById('cartOverlay');
-        const cartClose = document.getElementById('cartClose');
-        const continueShopping = document.getElementById('continueShopping');
 
         function toggleCart() {
             cartDrawer.classList.toggle('active');
@@ -376,10 +606,25 @@
             document.body.style.overflow = cartDrawer.classList.contains('active') ? 'hidden' : '';
         }
 
-        cartToggleBtn.addEventListener('click', toggleCart);
-        cartClose.addEventListener('click', toggleCart);
-        cartOverlay.addEventListener('click', toggleCart);
-        continueShopping.addEventListener('click', toggleCart);
+        if (cartToggleBtn) cartToggleBtn.onclick = toggleCart;
+        if (cartOverlay) cartOverlay.onclick = toggleCart;
+        rebindCartEvents();
+
+        const userDropdownBtn = document.getElementById('userDropdownBtn');
+        const userDropdownMenu = document.getElementById('userDropdownMenu');
+
+        if (userDropdownBtn) {
+            userDropdownBtn.onclick = (e) => {
+                e.stopPropagation();
+                userDropdownMenu.classList.toggle('active');
+            };
+        }
+
+        window.onclick = (e) => {
+            if (userDropdownMenu && !userDropdownMenu.contains(e.target)) {
+                userDropdownMenu.classList.remove('active');
+            }
+        };
     </script>
 </body>
 

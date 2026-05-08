@@ -475,6 +475,38 @@
                 </ul>
             </div>
 
+            @if (request('category') == 'Uniforms')
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Filter by Gender</h3>
+                    <ul class="category-list">
+                        <li>
+                            <a href="{{ route('shop.page', array_merge(request()->query(), ['gender' => 'all'])) }}"
+                                class="{{ !request('gender') || request('gender') == 'all' ? 'active' : '' }}">
+                                All Genders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('shop.page', array_merge(request()->query(), ['gender' => 'Male'])) }}"
+                                class="{{ request('gender') == 'Male' ? 'active' : '' }}">
+                                Male
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('shop.page', array_merge(request()->query(), ['gender' => 'Female'])) }}"
+                                class="{{ request('gender') == 'Female' ? 'active' : '' }}">
+                                Female
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('shop.page', array_merge(request()->query(), ['gender' => 'Unisex'])) }}"
+                                class="{{ request('gender') == 'Unisex' ? 'active' : '' }}">
+                                Unisex
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+
             <div class="sidebar-section">
                 <h3 class="sidebar-title">Filter by Price</h3>
                 <div class="price-range">
@@ -506,6 +538,9 @@
                     <form action="{{ route('shop.page') }}" method="GET" class="shop-search-wrapper">
                         @if (request('category'))
                             <input type="hidden" name="category" value="{{ request('category') }}">
+                        @endif
+                        @if (request('gender'))
+                            <input type="hidden" name="gender" value="{{ request('gender') }}">
                         @endif
                         <i class="fas fa-search search-icon"></i>
                         <input type="text" name="search" class="shop-search-input" value="{{ request('search') }}"
@@ -544,7 +579,8 @@
                                 @endif
                             </div>
                             <div class="product-actions">
-                                <button title="Quick View" onclick="location.href='/product/{{ $product->id }}'"><i
+                                <button title="Quick View"
+                                    onclick="location.href='{{ route('single.product.page', $product->id) }}'"><i
                                         class="far fa-eye"></i></button>
                                 <button title="Add to Cart" onclick="openVariantModal({{ $product->id }})">
                                     <i class="fas fa-cart-plus"></i>
@@ -552,8 +588,21 @@
                             </div>
                         </div>
                         <div class="product-info">
-                            <span class="product-cat">{{ $product->category_name }}</span>
-                            <h4 class="product-name">{{ $product->product_name }}</h4>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="product-cat">{{ $product->category_name }}</span>
+                                @if ($product->category_name === 'Uniforms' && $product->gender)
+                                    <span
+                                        style="font-size: 10px; background: #f0f2f5; color: #752738; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase;">
+                                        {{ $product->gender }}
+                                    </span>
+                                @endif
+                            </div>
+                            <h4 class="product-name">
+                                @if ($product->uniform_name)
+                                    {{ $product->uniform_name }} -
+                                @endif
+                                {{ $product->product_name }}
+                            </h4>
 
                             <div class="product-rating">
                                 <i class="fas fa-star"></i>
@@ -567,6 +616,11 @@
                                 <div class="product-available-sizes"
                                     style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
                                     Available sizes: <strong>{{ $product->available_sizes }}</strong>
+                                </div>
+                            @elseif (str_contains(strtolower($product->category_name), 'uniform'))
+                                <div class="product-available-sizes"
+                                    style="font-size: 11px; color: #752738; margin-top: 2px; font-weight: 600;">
+                                    Visit physical store for custom sizing
                                 </div>
                             @endif
                             <div class="product-price">
@@ -732,6 +786,14 @@
         });
 
         function addToCart(productId, variantId = null, quantity = 1) {
+            @if (!Auth::guard('customer')->check())
+                Toast.fire({
+                    icon: 'info',
+                    title: 'Please login first to add items to cart.'
+                })
+                return;
+            @endif
+
             fetch('{{ route('cart.add') }}', {
                     method: 'POST',
                     headers: {
@@ -745,7 +807,17 @@
                         quantity: quantity
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (response.status === 401) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Please login first to add items to cart.');
+                        });
+                    }
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.status === 'success') {
                         Toast.fire({
@@ -764,7 +836,7 @@
                     console.error('Error:', error);
                     Toast.fire({
                         icon: 'error',
-                        title: 'Something went wrong. Please try again.'
+                        title: error.message || 'Something went wrong. Please try again.'
                     });
                 });
         }

@@ -19,8 +19,10 @@ return new class extends Migration
             $table->text('product_description')->nullable();
             $table->decimal('product_price', 10, 2)->nullable();
             $table->json('product_image')->nullable();
+            $table->string('gender')->nullable();
             $table->integer('stocks')->nullable();
             $table->boolean('has_variant')->default(false);
+            $table->boolean('is_emailable')->default(false);
             $table->timestamps();
         });
     }

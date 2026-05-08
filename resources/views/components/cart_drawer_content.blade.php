@@ -23,7 +23,12 @@
             </div>
             <div class="cart-item-info">
                 <div class="cart-item-top">
-                    <h4>{{ $item->product->product_name }}</h4>
+                    <h4>
+                        @if ($item->product->uniformCategory)
+                            {{ $item->product->uniformCategory->uniform_name }} -
+                        @endif
+                        {{ $item->product->product_name }}
+                    </h4>
                     <button class="cart-item-remove" onclick="removeFromCart({{ $item->id }})"><i
                             class="fas fa-trash-can"></i></button>
                 </div>

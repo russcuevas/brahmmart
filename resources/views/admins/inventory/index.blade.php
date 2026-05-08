@@ -284,6 +284,11 @@
                             style="display: block; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Type</label>
                         <p id="modalType" style="margin: 0; font-weight: 600; color: var(--primary);"></p>
                     </div>
+                    <div id="modalGenderSection" style="margin-top: 16px;">
+                        <label
+                            style="display: block; font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Gender</label>
+                        <p id="modalGender" style="margin: 0; font-weight: 600; color: #752738;"></p>
+                    </div>
                 </div>
                 <div style="padding: 24px;">
                     <h2 id="modalProductName" style="margin: 0 0 12px 0; font-size: 1.5rem; color: #333;"></h2>
@@ -394,6 +399,16 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                <div id="editGenderSection" style="margin-top: 16px;">
+                                    <label
+                                        style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Gender</label>
+                                    <select name="gender" id="editGenderSelect"
+                                        style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Unisex">Unisex</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
@@ -459,13 +474,13 @@
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Price</label>
-                                    <input type="number" id="editSimplePrice" name="product_price" step="0.01"
+                                    <input type="number" id="editSimplePrice" name="product_price" step="0.01" required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Stock</label>
-                                    <input type="number" id="editSimpleStock" name="stocks"
+                                    <input type="number" id="editSimpleStock" name="stocks" required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                             </div>
@@ -540,6 +555,16 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div id="addGenderSection" style="margin-top: 20px;">
+                                <label
+                                    style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Gender</label>
+                                <select name="gender" id="addGenderSelect"
+                                    style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Unisex" selected>Unisex</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div style="margin-top: 24px;" id="hasVariantSection">
@@ -605,13 +630,13 @@
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Price</label>
-                                    <input type="number" name="product_price" step="0.01" placeholder="0.00"
+                                    <input type="number" name="product_price" step="0.01" placeholder="0.00" required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Stock</label>
-                                    <input type="number" name="stocks" placeholder="0"
+                                    <input type="number" name="stocks" placeholder="0" required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                             </div>
@@ -788,6 +813,14 @@
             document.getElementById('modalCategory').textContent = product.category_name;
             document.getElementById('modalType').textContent = product.uniform_name || 'General Product';
 
+            const genderSection = document.getElementById('modalGenderSection');
+            if (product.category_name === 'Uniforms') {
+                genderSection.style.display = 'block';
+                document.getElementById('modalGender').textContent = product.gender || 'Unisex';
+            } else {
+                genderSection.style.display = 'none';
+            }
+
             const images = product.product_image ? JSON.parse(product.product_image) : [];
             const mainImg = document.getElementById('modalMainImage');
             const thumbContainer = document.getElementById('modalThumbnails');
@@ -859,11 +892,15 @@
 
             // Set Uniform Type Section visibility
             const uniformSection = document.getElementById('editUniformTypeSection');
+            const genderSection = document.getElementById('editGenderSection');
             if (product.category_name === 'School Supplies' || product.category_name === 'Books') {
                 uniformSection.style.display = 'none';
+                genderSection.style.display = 'none';
                 uniformSelect.value = '';
             } else {
                 uniformSection.style.display = 'block';
+                genderSection.style.display = 'block';
+                document.getElementById('editGenderSelect').value = product.gender || 'Unisex';
             }
 
             // Set Form Action
@@ -972,9 +1009,13 @@
                 if (document.getElementById('editVariantTableBody').children.length === 0) {
                     addEditVariantRow();
                 }
+                variantSection.querySelectorAll('input').forEach(i => i.disabled = false);
+                simpleSection.querySelectorAll('input').forEach(i => i.disabled = true);
             } else {
                 variantSection.style.display = 'none';
                 simpleSection.style.display = 'block';
+                variantSection.querySelectorAll('input').forEach(i => i.disabled = true);
+                simpleSection.querySelectorAll('input').forEach(i => i.disabled = false);
             }
         }
 
@@ -1034,27 +1075,34 @@
                 if (tableBody.children.length === 0) {
                     addVariantRow(); // Add one default row
                 }
+                variantSection.querySelectorAll('input').forEach(i => i.disabled = false);
+                simpleSection.querySelectorAll('input').forEach(i => i.disabled = true);
             } else {
                 variantSection.style.display = 'none';
                 simpleSection.style.display = 'block';
+                variantSection.querySelectorAll('input').forEach(i => i.disabled = true);
+                simpleSection.querySelectorAll('input').forEach(i => i.disabled = false);
             }
         }
 
         function handleCategoryChange(select) {
             const selectedText = select.options[select.selectedIndex].text;
             const uniformSection = document.getElementById('uniformTypeSection');
+            const genderSection = document.getElementById('addGenderSection');
             const variantSectionWrap = document.getElementById('hasVariantSection');
             const hasVariantCheckbox = document.getElementById('addHasVariant');
             const uniformSelect = document.getElementById('addUniformType');
 
             if (selectedText === 'School Supplies' || selectedText === 'Books') {
                 uniformSection.style.display = 'none';
+                genderSection.style.display = 'none';
                 variantSectionWrap.style.display = 'none';
                 hasVariantCheckbox.checked = false;
                 uniformSelect.value = '';
                 toggleAddVariantSection(hasVariantCheckbox);
             } else {
                 uniformSection.style.display = 'block';
+                genderSection.style.display = 'block';
                 variantSectionWrap.style.display = 'block';
             }
         }
@@ -1062,13 +1110,14 @@
         function handleEditCategoryChange(select) {
             const selectedText = select.options[select.selectedIndex].text;
             const uniformSection = document.getElementById('editUniformTypeSection');
-            // Note: Edit modal doesn't have a has_variant checkbox (it's fixed by the DB entry)
-            // But we still hide the uniform type if it's not a uniform
+            const genderSection = document.getElementById('editGenderSection');
             if (selectedText === 'School Supplies' || selectedText === 'Books') {
                 uniformSection.style.display = 'none';
+                genderSection.style.display = 'none';
                 document.getElementById('editUniformType').value = '';
             } else {
                 uniformSection.style.display = 'block';
+                genderSection.style.display = 'block';
             }
         }
 

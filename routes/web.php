@@ -32,7 +32,7 @@ Route::get('/login', [AuthController::class, 'LoginPage'])->name('auth.login.pag
 Route::post('/login', [AuthController::class, 'LoginRequest'])->name('auth.login.request');
 Route::post('/logout', [AuthController::class, 'Logout'])->name('auth.logout');
 Route::get('/shop', [ShopController::class, 'ShopPage'])->name('shop.page');
-Route::get('/single_product', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
+Route::get('/shop/product/{id}', [ShopController::class, 'SingleProductPage'])->name('single.product.page');
 Route::get('/product/details/{id}', [ShopController::class, 'GetProductDetails'])->name('product.details');
 
 
@@ -46,11 +46,12 @@ Route::middleware(['admin'])->group(function () {
 });
 
 
+Route::get('/cart/get', [CartController::class, 'GetCart'])->name('cart.get');
+
 // CUSTOMER ROUTES
 Route::middleware(['customer'])->group(function () {
     Route::get('/students/dashboard', [CustomersDashboardController::class, 'CustomersDashboardPage'])->name('customer.dashboard.page');
     Route::post('/cart/add', [CartController::class, 'AddToCart'])->name('cart.add');
-    Route::get('/cart/get', [CartController::class, 'GetCart'])->name('cart.get');
     Route::post('/cart/update', [CartController::class, 'UpdateQuantity'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'RemoveItem'])->name('cart.remove');
 });

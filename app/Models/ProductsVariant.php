@@ -13,6 +13,7 @@ class ProductsVariant extends Model
         'product_id',
         'size',
         'price',
+        'gender',
         'stocks',
     ];
 }

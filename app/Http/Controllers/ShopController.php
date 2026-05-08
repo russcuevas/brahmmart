@@ -10,11 +10,17 @@ class ShopController extends Controller
     {
         $query = \Illuminate\Support\Facades\DB::table('products')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.category_name');
+            ->leftJoin('uniform_categories', 'products.uniform_category_id', '=', 'uniform_categories.id')
+            ->select('products.*', 'categories.category_name', 'uniform_categories.uniform_name');
 
         // Apply Category Filter
         if ($request->has('category') && $request->category != 'all') {
             $query->where('categories.category_name', $request->category);
+        }
+
+        // Apply Gender Filter
+        if ($request->has('gender') && $request->gender != 'all') {
+            $query->where('products.gender', $request->gender);
         }
 
         // Apply Price Filter
@@ -59,7 +65,7 @@ class ShopController extends Controller
 
         $cartItems = [];
         if (\Illuminate\Support\Facades\Auth::guard('customer')->check()) {
-            $cartItems = \App\Models\Carts::with(['product', 'variant'])
+            $cartItems = \App\Models\Carts::with(['product.uniformCategory', 'variant'])
                 ->where('customer_id', \Illuminate\Support\Facades\Auth::guard('customer')->id())
                 ->get();
         }
@@ -70,7 +76,8 @@ class ShopController extends Controller
     {
         $product = \Illuminate\Support\Facades\DB::table('products')
             ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->select('products.*', 'categories.category_name')
+            ->leftJoin('uniform_categories', 'products.uniform_category_id', '=', 'uniform_categories.id')
+            ->select('products.*', 'categories.category_name', 'uniform_categories.uniform_name')
             ->where('products.id', $id)
             ->first();
 
@@ -89,8 +96,51 @@ class ShopController extends Controller
         ]);
     }
 
-    public function SingleProductPage()
+    public function SingleProductPage($id)
     {
-        return view('single_product');
+        $product = \Illuminate\Support\Facades\DB::table('products')
+            ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->leftJoin('uniform_categories', 'products.uniform_category_id', '=', 'uniform_categories.id')
+            ->select('products.*', 'categories.category_name', 'uniform_categories.uniform_name')
+            ->where('products.id', $id)
+            ->first();
+
+        if (!$product) {
+            return redirect()->route('shop.page')->with('error', 'Product not found.');
+        }
+
+        $variants = \Illuminate\Support\Facades\DB::table('products_variants')
+            ->where('product_id', $id)
+            ->get();
+
+        $cartItems = [];
+        if (\Illuminate\Support\Facades\Auth::guard('customer')->check()) {
+            $cartItems = \App\Models\Carts::with(['product.uniformCategory', 'variant'])
+                ->where('customer_id', \Illuminate\Support\Facades\Auth::guard('customer')->id())
+                ->get();
+        }
+
+        $otherProducts = \Illuminate\Support\Facades\DB::table('products')
+            ->leftJoin('uniform_categories', 'products.uniform_category_id', '=', 'uniform_categories.id')
+            ->select('products.*', 'uniform_categories.uniform_name')
+            ->where('products.id', '!=', $id)
+            ->inRandomOrder()
+            ->limit(5)
+            ->get();
+
+        foreach ($otherProducts as $op) {
+            if ($op->has_variant) {
+                $variantData = \Illuminate\Support\Facades\DB::table('products_variants')
+                    ->where('product_id', $op->id)
+                    ->get();
+                $op->min_price = $variantData->min('price');
+                $op->max_price = $variantData->max('price');
+            } else {
+                $op->min_price = $op->product_price;
+                $op->max_price = $op->product_price;
+            }
+        }
+
+        return view('single_product', compact('product', 'variants', 'cartItems', 'otherProducts'));
     }
 }
