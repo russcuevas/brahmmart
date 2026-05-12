@@ -70,6 +70,19 @@ class InventoryController extends Controller
         }
 
         $hasVariant = $request->has('has_variant');
+        $isEmailable = $request->has('is_emailable');
+
+        // Automatic logic for non-variant products
+        if (!$hasVariant) {
+            $category = DB::table('categories')->where('id', $request->category_id)->first();
+            if ($category) {
+                if (in_array($category->category_name, ['School Supplies', 'Books'])) {
+                    $isEmailable = false;
+                }
+            }
+        } else {
+            $isEmailable = false;
+        }
 
         $productId = DB::table('products')->insertGetId([
             'category_id' => $request->category_id,
@@ -81,6 +94,7 @@ class InventoryController extends Controller
             'gender' => $request->gender,
             'stocks' => !$hasVariant ? $request->stocks : null,
             'has_variant' => $hasVariant,
+            'is_emailable' => $isEmailable,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -134,6 +148,21 @@ class InventoryController extends Controller
             }
         }
 
+        $hasVariant = $request->has('has_variant');
+        $isEmailable = $request->has('is_emailable');
+
+        // Automatic logic for non-variant products
+        if (!$hasVariant) {
+            $category = DB::table('categories')->where('id', $request->category_id)->first();
+            if ($category) {
+                if (in_array($category->category_name, ['School Supplies', 'Books'])) {
+                    $isEmailable = false;
+                }
+            }
+        } else {
+            $isEmailable = false;
+        }
+
         // Update Product
         $updateData = [
             'category_id' => $request->category_id,
@@ -142,7 +171,8 @@ class InventoryController extends Controller
             'product_description' => $request->product_description,
             'product_image' => json_encode($images),
             'gender' => $request->gender,
-            'has_variant' => $request->has('has_variant'),
+            'has_variant' => $hasVariant,
+            'is_emailable' => $isEmailable,
             'updated_at' => now(),
         ];
 

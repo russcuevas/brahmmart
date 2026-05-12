@@ -33,7 +33,6 @@ class ProductsVariantsTableSeeder extends Seeder
             'product_id' => 1,
             'size' => 'L',
             'gender' => 'Female',
-
             'price' => 620,
             'stocks' => 100,
         ]);
@@ -41,7 +40,6 @@ class ProductsVariantsTableSeeder extends Seeder
             'product_id' => 1,
             'size' => 'XL',
             'gender' => 'Female',
-
             'price' => 645,
             'stocks' => 100,
         ]);
@@ -50,7 +48,6 @@ class ProductsVariantsTableSeeder extends Seeder
             'product_id' => 1,
             'size' => '2XL',
             'gender' => 'Female',
-
             'price' => 645,
             'stocks' => 100,
         ]);
@@ -59,7 +56,6 @@ class ProductsVariantsTableSeeder extends Seeder
             'product_id' => 1,
             'size' => '3XL',
             'gender' => 'Female',
-
             'price' => 645,
             'stocks' => 100,
         ]);

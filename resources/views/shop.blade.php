@@ -543,8 +543,8 @@
                             <input type="hidden" name="gender" value="{{ request('gender') }}">
                         @endif
                         <i class="fas fa-search search-icon"></i>
-                        <input type="text" name="search" class="shop-search-input" value="{{ request('search') }}"
-                            placeholder="Search for uniforms, books, supplies...">
+                        <input type="text" name="search" class="shop-search-input"
+                            value="{{ request('search') }}" placeholder="Search for uniforms, books, supplies...">
                         <button type="submit" class="search-btn">Search</button>
                     </form>
                     <div class="shop-utils">
@@ -617,7 +617,7 @@
                                     style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
                                     Available sizes: <strong>{{ $product->available_sizes }}</strong>
                                 </div>
-                            @elseif (str_contains(strtolower($product->category_name), 'uniform'))
+                            @elseif ($product->is_emailable == 1)
                                 <div class="product-available-sizes"
                                     style="font-size: 11px; color: #752738; margin-top: 2px; font-weight: 600;">
                                     Visit physical store for custom sizing

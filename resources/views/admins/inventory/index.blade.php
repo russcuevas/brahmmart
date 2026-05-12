@@ -412,6 +412,15 @@
                             </div>
                         </div>
 
+                        <div style="margin-top: 16px; display: none;" id="editIsUniformSection">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" name="is_emailable" id="editIsUniform"
+                                    style="width: 18px; height: 18px;">
+                                <span style="font-weight: 600; color: #333;">This product has customization
+                                    sizes?</span>
+                            </label>
+                        </div>
+
                         <div style="margin-top: 24px;" id="editHasVariantSection">
                             <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                                 <input type="checkbox" name="has_variant" id="editHasVariant"
@@ -474,7 +483,8 @@
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Price</label>
-                                    <input type="number" id="editSimplePrice" name="product_price" step="0.01" required
+                                    <input type="number" id="editSimplePrice" name="product_price" step="0.01"
+                                        required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                                 <div>
@@ -567,6 +577,15 @@
                             </div>
                         </div>
 
+                        <div style="margin-top: 16px; display: none;" id="addIsUniformSection">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                                <input type="checkbox" name="is_emailable" id="addIsUniform"
+                                    style="width: 18px; height: 18px;">
+                                <span style="font-weight: 600; color: #333;">This product has customization
+                                    sizes?</span>
+                            </label>
+                        </div>
+
                         <div style="margin-top: 24px;" id="hasVariantSection">
                             <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                                 <input type="checkbox" name="has_variant" id="addHasVariant"
@@ -630,7 +649,8 @@
                                 <div>
                                     <label
                                         style="display: block; font-weight: 600; margin-bottom: 8px; color: #333;">Price</label>
-                                    <input type="number" name="product_price" step="0.01" placeholder="0.00" required
+                                    <input type="number" name="product_price" step="0.01" placeholder="0.00"
+                                        required
                                         style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px;">
                                 </div>
                                 <div>
@@ -915,6 +935,9 @@
             const hasVariantCheckbox = document.getElementById('editHasVariant');
             hasVariantCheckbox.checked = !!product.has_variant;
 
+            const isUniformCheckbox = document.getElementById('editIsUniform');
+            isUniformCheckbox.checked = !!product.is_emailable;
+
             // Trigger visibility for variants checkbox itself
             if (product.category_name === 'Uniforms') {
                 document.getElementById('editHasVariantSection').style.display = 'block';
@@ -1003,9 +1026,12 @@
         function toggleEditVariantSection(checkbox) {
             const variantSection = document.getElementById('editVariantSection');
             const simpleSection = document.getElementById('editSimpleSection');
+            const isUniformSection = document.getElementById('editIsUniformSection');
+
             if (checkbox.checked) {
                 variantSection.style.display = 'block';
                 simpleSection.style.display = 'none';
+                isUniformSection.style.display = 'none';
                 if (document.getElementById('editVariantTableBody').children.length === 0) {
                     addEditVariantRow();
                 }
@@ -1014,6 +1040,19 @@
             } else {
                 variantSection.style.display = 'none';
                 simpleSection.style.display = 'block';
+
+                // Automatic logic based on category
+                const categoryName = document.getElementById('editCategoryDisplay').textContent;
+                const isUniformCheckbox = document.getElementById('editIsUniform');
+
+                if (categoryName === 'Uniforms') {
+                    isUniformSection.style.display = 'block';
+                    // Respect current value or default to false
+                } else {
+                    isUniformSection.style.display = 'none';
+                    isUniformCheckbox.checked = false;
+                }
+
                 variantSection.querySelectorAll('input').forEach(i => i.disabled = true);
                 simpleSection.querySelectorAll('input').forEach(i => i.disabled = false);
             }
@@ -1067,11 +1106,13 @@
         function toggleAddVariantSection(checkbox) {
             const variantSection = document.getElementById('addVariantSection');
             const simpleSection = document.getElementById('addSimpleSection');
+            const isUniformSection = document.getElementById('addIsUniformSection');
             const tableBody = document.getElementById('addVariantTableBody');
 
             if (checkbox.checked) {
                 variantSection.style.display = 'block';
                 simpleSection.style.display = 'none';
+                isUniformSection.style.display = 'none';
                 if (tableBody.children.length === 0) {
                     addVariantRow(); // Add one default row
                 }
@@ -1080,6 +1121,21 @@
             } else {
                 variantSection.style.display = 'none';
                 simpleSection.style.display = 'block';
+
+                // Automatic logic based on category
+                const categorySelect = document.getElementById('addCategorySelect');
+                const selectedText = categorySelect.options[categorySelect.selectedIndex].text;
+                const isUniformCheckbox = document.getElementById('addIsUniform');
+
+                if (selectedText === 'Uniforms') {
+                    isUniformSection.style.display = 'block';
+                    // Default to unchecked as requested
+                    isUniformCheckbox.checked = false;
+                } else {
+                    isUniformSection.style.display = 'none';
+                    isUniformCheckbox.checked = false;
+                }
+
                 variantSection.querySelectorAll('input').forEach(i => i.disabled = true);
                 simpleSection.querySelectorAll('input').forEach(i => i.disabled = false);
             }
@@ -1099,12 +1155,14 @@
                 variantSectionWrap.style.display = 'none';
                 hasVariantCheckbox.checked = false;
                 uniformSelect.value = '';
-                toggleAddVariantSection(hasVariantCheckbox);
             } else {
                 uniformSection.style.display = 'block';
                 genderSection.style.display = 'block';
                 variantSectionWrap.style.display = 'block';
             }
+
+            // Refresh variant/uniform sections visibility
+            toggleAddVariantSection(hasVariantCheckbox);
         }
 
         function handleEditCategoryChange(select) {
