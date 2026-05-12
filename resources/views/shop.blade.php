@@ -590,7 +590,7 @@
                         <div class="product-info">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span class="product-cat">{{ $product->category_name }}</span>
-                                @if ($product->category_name === 'Uniforms' && $product->gender)
+                                @if ($product->gender)
                                     <span
                                         style="font-size: 10px; background: #f0f2f5; color: #752738; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase;">
                                         {{ $product->gender }}
@@ -659,8 +659,16 @@
                         <!-- Images will be injected here -->
                     </div>
                     <div class="modal-info-text">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <p id="modalProductCat" style="margin: 0;">Category</p>
+                            <span id="modalGenderBadge"
+                                style="display: none; font-size: 10px; background: #f0f2f5; color: #752738; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase;"></span>
+                        </div>
                         <h4 id="modalProductName">Product Name</h4>
-                        <p id="modalProductCat">Category</p>
+                        <div id="modalEmailableNote"
+                            style="display: none; font-size: 11px; color: #752738; margin-top: 4px; font-weight: 600;">
+                            <i class="fas fa-info-circle"></i> Visit physical store for custom sizing
+                        </div>
                         <div class="modal-product-price" id="modalProductPrice">₱0.00</div>
                     </div>
                 </div>
@@ -975,6 +983,23 @@
 
                         document.getElementById('modalProductName').textContent = product.product_name;
                         document.getElementById('modalProductCat').textContent = product.category_name;
+
+                        // Gender Badge
+                        const genderBadge = document.getElementById('modalGenderBadge');
+                        if (product.gender) {
+                            genderBadge.textContent = product.gender;
+                            genderBadge.style.display = 'inline-block';
+                        } else {
+                            genderBadge.style.display = 'none';
+                        }
+
+                        // Emailable Note
+                        const emailableNote = document.getElementById('modalEmailableNote');
+                        if (product.is_emailable == 1) {
+                            emailableNote.style.display = 'block';
+                        } else {
+                            emailableNote.style.display = 'none';
+                        }
 
                         const basePrice = parseFloat(product.product_price) || 0;
                         document.getElementById('modalProductPrice').textContent =

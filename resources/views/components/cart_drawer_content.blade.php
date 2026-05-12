@@ -32,8 +32,18 @@
                     <button class="cart-item-remove" onclick="removeFromCart({{ $item->id }})"><i
                             class="fas fa-trash-can"></i></button>
                 </div>
+                @if ($item->product->gender)
+                    <span class="cart-item-variant"
+                        style="font-weight: 600; color: #752738; margin-bottom: 2px;">Gender:
+                        {{ $item->product->gender }}</span>
+                @endif
                 @if ($item->variant)
-                    <span class="cart-item-variant">Size: {{ $item->variant->size }}</span>
+                    <span class="cart-item-variant" style="margin-bottom: 2px;">Size: {{ $item->variant->size }}</span>
+                @endif
+                @if ($item->product->is_emailable == 1)
+                    <span class="cart-item-variant" style="color: #27ae60; font-weight: 600; margin-bottom: 8px;">
+                        <i class="fas fa-scissors" style="font-size: 10px;"></i> Custom Sizing Available at Store
+                    </span>
                 @endif
                 <div class="cart-item-bottom">
                     <div class="cart-item-qty">

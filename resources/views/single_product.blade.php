@@ -229,8 +229,13 @@
                         </button>
                     @endforeach
                 </div>
+            @elseif ($product->is_emailable == 1)
+                <div class="product-available-sizes"
+                    style="font-size: 14px; color: #752738; margin-top: 10px; font-weight: 600; background: #fff5f7; padding: 10px; border-radius: 8px; border: 1px solid #fed7e2;">
+                    <i class="fas fa-info-circle"></i> Visit physical store for custom sizing
+                </div>
             @endif
-
+            <br>
             {{-- Stock Warning --}}
             <div class="stock-warning">
                 <i class="fas fa-fire"></i>
@@ -263,11 +268,19 @@
                         <div class="about-table-cell label">Category</div>
                         <div class="about-table-cell value">{{ $product->category_name }}</div>
                     </div>
-                    @if ($product->category_name === 'Uniforms' && $product->gender)
+                    @if ($product->gender)
                         <div class="about-table-row">
                             <div class="about-table-cell label">Gender</div>
                             <div class="about-table-cell value" style="color: #752738; font-weight: 700;">
                                 {{ $product->gender }}
+                            </div>
+                        </div>
+                    @endif
+                    @if ($product->is_emailable == 1)
+                        <div class="about-table-row">
+                            <div class="about-table-cell label">Custom Sizing</div>
+                            <div class="about-table-cell value" style="color: #752738; font-weight: 700;">
+                                Available (Visit Store)
                             </div>
                         </div>
                     @endif
