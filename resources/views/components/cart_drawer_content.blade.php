@@ -77,7 +77,7 @@
         </div>
     </div>
     <div class="cart-actions">
-        <button class="btn-checkout-cart">Checkout Now</button>
+        <button class="btn-checkout-cart" onclick="handleCheckout()">Checkout Now</button>
         <button class="btn-continue-shopping" id="continueShopping">Continue Shopping</button>
     </div>
 </div>

@@ -638,6 +638,53 @@
                 userDropdownMenu.classList.remove('active');
             }
         };
+        window.handleCheckout = function() {
+            Swal.fire({
+                title: 'Proceed to Checkout?',
+                text: "Confirm your order to receive instructions via email.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#752738',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Place Order'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Processing...',
+                        html: 'Please wait while we process your order.',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch('{{ route('cart.checkout') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            Swal.close();
+                            if (data.status === 'success') {
+                                Swal.fire('Ordered!', data.message, 'success')
+                                .then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error', data.message, 'error');
+                            }
+                        })
+                        .catch(error => {
+                            Swal.close();
+                            Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                        });
+                }
+            });
+        }
     </script>
 </body>
 

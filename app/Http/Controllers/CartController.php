@@ -72,4 +72,67 @@ class CartController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Item removed from bag.']);
     }
+    public function Checkout()
+    {
+        if (!Auth::guard('customer')->check()) {
+            return response()->json(['status' => 'error', 'message' => 'Please login first.'], 401);
+        }
+
+        $customer = Auth::guard('customer')->user();
+        $cartItems = Carts::with(['product', 'variant'])
+            ->where('customer_id', $customer->id)
+            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return response()->json(['status' => 'error', 'message' => 'Your shopping bag is empty.']);
+        }
+
+        // Start Transaction
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            // Calculate Total
+            $totalPrice = 0;
+            foreach ($cartItems as $item) {
+                $price = $item->variant ? $item->variant->price : $item->product->product_price;
+                $totalPrice += $price * $item->quantity;
+            }
+
+            // Create Order
+            $order = \App\Models\Orders::create([
+                'customer_id' => $customer->id,
+                'total_price' => $totalPrice,
+                'status' => 'pending'
+            ]);
+
+            // Create Order Items
+            foreach ($cartItems as $item) {
+                $price = $item->variant ? $item->variant->price : $item->product->product_price;
+                \App\Models\OrderItems::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'variant_id' => $item->variant_id,
+                    'quantity' => $item->quantity,
+                    'price_at_order' => $price
+                ]);
+            }
+
+            // Clear Cart
+            Carts::where('customer_id', $customer->id)->delete();
+
+            \Illuminate\Support\Facades\DB::commit();
+
+            // Send Email
+            \Illuminate\Support\Facades\Mail::to($customer->email)
+                ->send(new \App\Mail\OrderConfirmation($order));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Order placed successfully! Please check your email for details.'
+            ]);
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return response()->json(['status' => 'error', 'message' => 'Failed to place order: ' . $e->getMessage()]);
+        }
+    }
 }
