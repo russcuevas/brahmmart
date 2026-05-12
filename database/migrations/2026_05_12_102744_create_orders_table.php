@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->decimal('total_price', 15, 2);
             $table->string('status')->default('pending');
+            $table->dateTime('pick_up_date')->nullable();
+            $table->text('order_note')->nullable();
             $table->timestamps();
         });
     }

@@ -14,7 +14,7 @@ class AdminsTableSeeder extends Seeder
     public function run(): void
     {
         Admins::create([
-            'email' => 'ub-bookstore@gmail.com',
+            'email' => 'ub-bookstore@ub.edu.ph',
             'password' => bcrypt('123456789'),
         ]);
     }

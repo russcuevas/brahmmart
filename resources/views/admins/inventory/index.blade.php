@@ -8,6 +8,22 @@
     <link rel="shortcut icon" href="{{ asset('favicon.png') }}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('assets/admin/dashboard.css') }}">
+    <style>
+        .sidebar {
+            z-index: 1001 !important;
+            position: fixed;
+            pointer-events: auto !important;
+        }
+
+        .main-content {
+            z-index: 1;
+            position: relative;
+        }
+
+        .sidebar-overlay {
+            z-index: 1000;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,22 +58,23 @@
                 </a>
 
 
-                <a href="#" class="sidebar-nav-item" id="nav-accounts">
+                <a href="{{ route('admin.admins.page') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.admins.page') ? 'active' : '' }}"
+                    id="nav-accounts">
                     <i class="fas fa-user-tie"></i>
                     Admins
-                    <span class="nav-badge">24</span>
                 </a>
 
-                <a href="#" class="sidebar-nav-item" id="nav-students">
+                <a href="{{ route('admin.students.page') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.students.page') ? 'active' : '' }}"
+                    id="nav-students">
                     <i class="fas fa-user-graduate"></i>
                     Students
-                    <span class="nav-badge">24</span>
                 </a>
 
                 <a href="#" class="sidebar-nav-item" id="nav-id-scheduling">
                     <i class="fas fa-id-card"></i>
                     ID Scheduling
-                    <span class="nav-badge">30</span>
                 </a>
 
                 <a href="{{ route('admin.inventory.page') }}"
@@ -70,7 +87,9 @@
 
                 <div class="sidebar-nav-label" style="margin-top: 16px;">Management</div>
 
-                <a href="#" class="sidebar-nav-item" id="nav-orders">
+                <a href="{{ route('admin.orders.page') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.orders.page') ? 'active' : '' }}"
+                    id="nav-orders">
                     <i class="fas fa-receipt"></i>
                     Orders
                 </a>
@@ -115,15 +134,7 @@
                         <p>Manage your products and stock levels</p>
                     </div>
                 </div>
-                <div class="header-right">
-                    <button class="header-icon-btn" id="notifBtn" aria-label="Notifications">
-                        <i class="fas fa-bell"></i>
-                        <span class="notif-dot"></span>
-                    </button>
-                    <button class="header-icon-btn" id="settingsBtn" aria-label="Settings">
-                        <i class="fas fa-user"></i>
-                    </button>
-                </div>
+
             </header>
 
             {{-- Page Content --}}
