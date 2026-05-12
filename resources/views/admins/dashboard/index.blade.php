@@ -72,7 +72,9 @@
                     Students
                 </a>
 
-                <a href="#" class="sidebar-nav-item" id="nav-id-scheduling">
+                <a href="{{ route('admin.scheduling.page') }}"
+                    class="sidebar-nav-item {{ request()->routeIs('admin.scheduling.page') ? 'active' : '' }}"
+                    id="nav-id-scheduling">
                     <i class="fas fa-id-card"></i>
                     ID Scheduling
                 </a>
@@ -93,10 +95,7 @@
                     Orders
                 </a>
 
-                <a href="#" class="sidebar-nav-item" id="nav-analytics">
-                    <i class="fas fa-chart-simple"></i>
-                    Analytics
-                </a>
+
 
             </nav>
 

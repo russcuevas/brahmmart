@@ -1,2 +1,10 @@
-automatic is_emailable to true if not check the variant sizes uniforms category
-automatic false if not check the variant sizes uniforms category, school supplies and books
+scheduling_id
+customer_id foreign to customers table -> id
+school_year
+student_no
+guardian_name
+guardin_contact_no
+picture_id string
+e_signature string
+status string
+pick_up_date -> nullable

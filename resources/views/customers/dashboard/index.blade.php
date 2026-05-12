@@ -195,7 +195,7 @@
                     My Orders
                 </a>
 
-                <a href="#" class="sidebar-nav-item" id="nav-id-scheduling">
+                <a href="{{ route('customer.scheduling.index') }}" class="sidebar-nav-item {{ request()->routeIs('customer.scheduling.index') ? 'active' : '' }}" id="nav-id-scheduling">
                     <i class="fas fa-id-card"></i>
                     ID Scheduling
                 </a>

@@ -295,6 +295,17 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                @if (Auth::guard('admin')->check())
+                    <a href="{{ route('admin.dashboard.page') }}" class="btn-proceed">Proceed Now <i
+                            class="fas fa-arrow-right"></i></a>
+                @elseif(Auth::guard('customer')->check())
+                    <a href="{{ route('customer.dashboard.page') }}" class="btn-proceed">Proceed Now <i
+                            class="fas fa-arrow-right"></i></a>
+                @else
+                    <a href="/login" class="btn-proceed">Proceed Now <i class="fas fa-arrow-right"></i></a>
+                @endif
+            </div>
         </div>
     </div>
 

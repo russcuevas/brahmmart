@@ -6,6 +6,7 @@ use App\Http\Controllers\auth\AuthController;
 use App\Http\Controllers\customers\CustomersDashboardController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\customers\MyOrdersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +64,10 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/admin/students', [\App\Http\Controllers\admin\StudentController::class, 'StoreStudent'])->name('admin.students.store');
     Route::put('/admin/students/{id}', [\App\Http\Controllers\admin\StudentController::class, 'UpdateStudent'])->name('admin.students.update');
     Route::delete('/admin/students/{id}', [\App\Http\Controllers\admin\StudentController::class, 'DeleteStudent'])->name('admin.students.delete');
+    // ID Scheduling Management
+    Route::get('/admin/scheduling', [\App\Http\Controllers\admin\AdminIDSchedulingController::class, 'index'])->name('admin.scheduling.page');
+    Route::put('/admin/scheduling/{id}', [\App\Http\Controllers\admin\AdminIDSchedulingController::class, 'update'])->name('admin.scheduling.update');
+    Route::post('/admin/scheduling/{id}/reject', [\App\Http\Controllers\admin\AdminIDSchedulingController::class, 'reject'])->name('admin.scheduling.reject');
 });
 
 
@@ -76,4 +81,9 @@ Route::middleware(['customer'])->group(function () {
     Route::post('/cart/update', [CartController::class, 'UpdateQuantity'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'RemoveItem'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'Checkout'])->name('cart.checkout');
+
+    // ID Scheduling
+    Route::get('/students/scheduling', [\App\Http\Controllers\customers\IDSchedulingController::class, 'index'])->name('customer.scheduling.index');
+    Route::post('/students/scheduling', [\App\Http\Controllers\customers\IDSchedulingController::class, 'store'])->name('customer.scheduling.store');
+    Route::delete('/students/scheduling/{id}', [\App\Http\Controllers\customers\IDSchedulingController::class, 'destroy'])->name('customer.scheduling.destroy');
 });
